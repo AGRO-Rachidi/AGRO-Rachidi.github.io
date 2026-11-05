@@ -355,6 +355,7 @@ a:hover { color: var(--accent); }
 .project-card:hover { transform: translateY(-3px); border-color: var(--blue); box-shadow: 0 18px 40px -24px rgba(61,139,255,.55); color: inherit; }
 .thumb { height: 190px; background: var(--term-bg); border-bottom: 1px solid var(--line); overflow: hidden; position: relative; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; background: #fff; }
+.thumb img[src*="hardening-"], .thumb img[src*="techcorp-"] { object-position: left top; background: #300a24; }
 .thumb-code { margin: 0; height: 100%; padding: .9rem 1rem; background: var(--term-bg); color: #c9d4ea; font: 500 .72rem/1.5 var(--font-mono); overflow: hidden; white-space: pre; border: 0; border-radius: 0; }
 .thumb-code.is-term { background: #300a24; color: #e8e8e8; }
 .thumb-code .cmd { color: #8ae234; font-weight: 700; }

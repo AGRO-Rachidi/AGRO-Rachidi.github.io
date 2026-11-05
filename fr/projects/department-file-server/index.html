@@ -59,102 +59,14 @@
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Chaque service doit accéder à ses propres documents et à un espace commun, et à rien d&#39;autre. L&#39;installation devait aussi être reproductible : retaper les mêmes sept commandes par service avait déjà produit de vraies erreurs.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Le moindre privilège sur le disque, les mêmes garanties à travers le réseau, et un script d&#39;installation que l&#39;on peut relancer sans risque.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Un groupe Unix et un dossier par service, en mode 770 avec le bit SGID, plus un dossier commun accessible via un groupe secondaire partagé.</li><li>Des ACL POSIX sur le dossier parent donnent à chaque service uniquement le droit de traversée (x).</li><li>Un script Bash idempotent à trois fonctions (créer le service, créer les utilisateurs, préparer les dossiers) qui vérifie l&#39;état existant avant d&#39;agir.</li><li>Des partages Samba sous /srv (selon la norme FHS), un par groupe : valid users = @groupe, create mask 0660, configuration validée avec testparm.</li></ul></div></section>
-    <div class="case-figures"><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># bash techcorp_setup.sh</span>
-Le service rh a ete cree
-Le dossier rh a ete cree
-Permissions assignees
-Groupe assigne
-Le service it a ete cree
-Le dossier it a ete cree
-Permissions assignees
-Groupe assigne
-Le service finance a ete cree
-Le dossier finance a ete cree
-Permissions assignees
-Groupe assigne
-Le service direction a ete cree
-Le dossier direction a ete cree
-Permissions assignees
-Groupe assigne
-L&#39;utilisateur rh_awa a ete cree
-L&#39;utilisateur rh_koffi a ete cree
-L&#39;utilisateur it_admin a ete cree
-L&#39;utilisateur it_junior a ete cree
-L&#39;utilisateur finance_edwige a ete cree
-L&#39;utilisateur finance_bio a ete cree
-L&#39;utilisateur direction_ceo a ete cree
-
-<span class="cmd"># bash techcorp_setup.sh</span>
-Le service rh existe deja
-Le dossier rh existe deja
-Permissions deja correctes
-Groupe deja correct
-Le service it existe deja
-Le dossier it existe deja
-Permissions deja correctes
-Groupe deja correct
-Le service finance existe deja
-Le dossier finance existe deja
-Permissions deja correctes
-Groupe deja correct
-Le service direction existe deja
-Le dossier direction existe deja
-Permissions deja correctes
-Groupe deja correct
-L&#39;utilisateur rh_awa existe deja
-L&#39;utilisateur rh_koffi existe deja
-L&#39;utilisateur it_admin existe deja
-L&#39;utilisateur it_junior existe deja
-L&#39;utilisateur finance_edwige existe deja
-L&#39;utilisateur finance_bio existe deja
-L&#39;utilisateur direction_ceo existe deja</code></pre>
+    <div class="case-figures"><figure class="case-figure">
+    <img src="../../../assets/img/projects/techcorp-idem.png" width="964" height="1033" alt="Terminal : la première exécution de techcorp_setup.sh crée 4 groupes, les dossiers et 7 utilisateurs ; la seconde indique que tout existe déjà" loading="lazy">
     <figcaption>Le script lancé deux fois : la seconde exécution ne change rien.</figcaption>
-  </figure><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># ls -l /data</span>
-total 16
-drwxrws--- 2 root direction 4096 Nov  5 16:54 direction_folders
-drwxrws--- 2 root finance   4096 Nov  5 16:54 finance_folders
-drwxrws--- 2 root it        4096 Nov  5 16:54 it_folders
-drwxrws--- 2 root rh        4096 Nov  5 16:54 rh_folders
-
-<span class="cmd"># su - rh_awa -c &quot;touch /data/rh_folders/note_rh.txt &amp;&amp; ls -l /data/rh_folders&quot;</span>
-total 0
--rw-r--r-- 1 rh_awa rh 0 Nov  5 16:55 note_rh.txt
-
-<span class="cmd"># su - rh_awa -c &quot;ls /data/finance_folders&quot;</span>
-ls: cannot open directory &#39;/data/finance_folders&#39;: Permission denied
-
-<span class="cmd"># su - finance_bio -c &quot;cat /data/rh_folders/note_rh.txt&quot;</span>
-cat: /data/rh_folders/note_rh.txt: Permission denied</code></pre>
+  </figure><figure class="case-figure">
+    <img src="../../../assets/img/projects/techcorp-iso.png" width="964" height="333" alt="Terminal : dossiers en 770 avec SGID ; RH écrit dans son dossier, RH refusé chez Finance, Finance refusé chez RH" loading="lazy">
     <figcaption>Chaque service n&#39;accède qu&#39;à son propre dossier.</figcaption>
-  </figure><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># getfacl -p /srv/samba | grep group</span>
-# group: root
-group::r-x
-group:rh:--x
-group:it:--x
-group:finance:--x
-group:direction:--x
-
-<span class="cmd"># testparm -s 2&gt;/dev/null | sed -n &quot;/^\[rh\]/,/^$/p&quot;</span>
-[rh]
-        create mask = 0660
-        path = /srv/samba/rh
-        read only = No
-        valid users = @rh
-
-<span class="cmd"># smbclient //127.0.0.1/rh -U rh_awa%$PW -c &quot;put /etc/hostname bilan_rh.txt; ls&quot;</span>
-putting file /etc/hostname as \bilan_rh.txt (0.3 kb/s) (average 0.3 kb/s)
-  .                                   D        0  Thu Nov  5 16:56:02 2026
-  ..                                  D        0  Thu Nov  5 16:56:02 2026
-  bilan_rh.txt                        A       13  Thu Nov  5 16:56:02 2026
-
-<span class="cmd"># smbclient //127.0.0.1/finance -U rh_awa%$PW -c ls</span>
-tree connect failed: NT_STATUS_ACCESS_DENIED
-
-<span class="cmd"># smbclient //127.0.0.1/rh -U finance_bio%$PW -c ls</span>
-tree connect failed: NT_STATUS_ACCESS_DENIED</code></pre>
+  </figure><figure class="case-figure">
+    <img src="../../../assets/img/projects/techcorp-smb.png" width="964" height="513" alt="Terminal : ACL de traversée seule, configuration du partage, l&#39;utilisateur RH dépose un fichier sur le partage RH, accès refusé aux autres partages" loading="lazy">
     <figcaption>Les mêmes règles tiennent à travers le réseau, avec Samba.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Construction du modèle à la main d&#39;abord, puis remplacement de la répétition par un script. Les employés sont stockés sous la forme utilisateur:groupe et découpés par expansion de paramètres Bash, sans commande externe.</li><li>Correction de vrais bugs en cours de route : un test qui exécutait une variable au lieu de l&#39;évaluer ; useradd qui échouait en silence pendant que le script affichait « créé » (corrigé en testant le code de sortie) ; une comparaison faite contre la ligne getent entière au lieu de son premier champ.</li><li>Ouverture au réseau avec Samba : un compte système et un compte Samba distinct par employé, créés en boucle.</li><li>Tous les tests faits avec le vrai compte de chaque employé, jamais en root.</li></ul></div></section>

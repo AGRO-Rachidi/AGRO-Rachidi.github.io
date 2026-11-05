@@ -59,68 +59,14 @@
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>A freshly installed server with no protection. Every requirement (access, data separation, backups, availability, traceability) had to be met and demonstrated, not just configured.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Bring the server to the specification in seven days, prove each control with a test, and close the week with an honest self-audit.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Ubuntu 24.04 server in a Docker container, on its own isolated Docker network with a fixed address.</li><li>Three named accounts: two administrators with sudo, one service account with no interactive shell. Each has its own ed25519 key pair protected by a passphrase.</li><li>SSH on a non-default port, root login and password authentication disabled; UFW denies all incoming traffic except SSH from the administration subnet.</li><li>A nightly job compresses the accounting data, encrypts it with GPG (AES-256), deletes the clear archive and keeps seven days of history.</li><li>Nginx supervised by supervisord; connection history available through last and lastlog.</li></ul></div></section>
-    <div class="case-figures"><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># sshd -T 2&gt;/dev/null | grep -E &quot;^(port|permitrootlogin|passwordauthentication|pubkeyauthentication) &quot;</span>
-port 2222
-permitrootlogin no
-pubkeyauthentication yes
-passwordauthentication no
-
-<span class="cmd"># ufw status verbose</span>
-Status: active
-Logging: on (low)
-Default: deny (incoming), allow (outgoing), deny (routed)
-New profiles: skip
-
-To                         Action      From
---                         ------      ----
-2222/tcp                   ALLOW IN    192.168.100.0/24          
-
-<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive root@127.0.0.1 true</span>
-Warning: Permanently added &#39;[127.0.0.1]:2222&#39; (ED25519) to the list of known hosts.
-root@127.0.0.1: Permission denied (publickey).
-
-<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive agro@127.0.0.1 true</span>
-agro@127.0.0.1: Permission denied (publickey).
-
-<span class="cmd"># ls -ld /data/comptabilite</span>
-drwxrws--- 2 root comptabilite 4096 Aug 26 09:52 /data/comptabilite</code></pre>
+    <div class="case-figures"><figure class="case-figure">
+    <img src="../../assets/img/projects/hardening-access.png" width="1268" height="493" alt="Terminal: sshd settings (port 2222, root login and passwords disabled), UFW active with default deny, password logins refused" loading="lazy">
     <figcaption>Access: SSH with keys only, firewall closed by default, password logins refused.</figcaption>
-  </figure><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># /root/scripts/backup.sh &amp;&amp; ls -lh /mnt/backup | tail -n 3</span>
-total 4.0K
--rw-r--r-- 1 root root 237 Nov  5 17:44 backup_comptabilite_2026-11-05_174402.tar.gz.gpg
-
-<span class="cmd"># rm -rf /tmp/restore &amp;&amp; mkdir /tmp/restore</span>
-
-<span class="cmd"># time (gpg --batch --decrypt --passphrase-file &quot;$PF&quot; /mnt/backup/backup_comptabilite_2026-11-05_174402.tar.gz.gpg | tar -xz -C /tmp/restore)</span>
-real    0m0.185s
-
-<span class="cmd"># diff -r /data/comptabilite /tmp/restore/comptabilite &amp;&amp; echo &quot;Aucune différence : restauration identique aux données&quot;</span>
-Aucune différence : restauration identique aux données</code></pre>
+  </figure><figure class="case-figure">
+    <img src="../../assets/img/projects/hardening-backup.png" width="1308" height="233" alt="Terminal: encrypted backup created, restored to a separate folder and compared with diff: no difference" loading="lazy">
     <figcaption>Backups: a backup only counts once it has been restored.</figcaption>
-  </figure><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
-nginx                            RUNNING   pid 343, uptime 0:00:03
-343 nginx: master process /usr/sbin/nginx -g daemon off;
-344 nginx: worker process
-345 nginx: worker process
-346 nginx: worker process
-347 nginx: worker process
-
-<span class="cmd"># pkill -9 -x nginx; sleep 1; supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
-nginx                            STARTING  
-365 nginx: master process /usr/sbin/nginx -g daemon off;
-366 nginx: worker process
-367 nginx: worker process
-368 nginx: worker process
-369 nginx: worker process
-
-<span class="cmd"># curl -s -o /dev/null -w &quot;HTTP %{http_code}\n&quot; http://127.0.0.1/</span>
-HTTP 200
-
-<span class="cmd"># cat /var/log/nginx-supervisor-err.log | wc -l</span>
-0</code></pre>
+  </figure><figure class="case-figure">
+    <img src="../../assets/img/projects/hardening-resil.png" width="964" height="433" alt="Terminal: all Nginx processes killed, supervisord starts a new master and workers, site answers HTTP 200" loading="lazy">
     <figcaption>Resilience: Nginx comes back on its own after a crash.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Day 1: isolated network, named accounts, key-only SSH and firewall. Public keys were copied in with docker cp, because password authentication was never enabled, not even temporarily.</li><li>Days 2–3: dedicated accounting folder with the SGID bit; encrypted backup script with seven-day rotation, then a full restore test.</li><li>Days 4–5: automatic restart of the web service, and connection traceability.</li><li>Day 6: an unannounced incident (a customer claims to have received an invoice they never ordered), investigated without knowing the answer.</li><li>Day 7: self-audit of every requirement and a mission report.</li></ul></div></section>

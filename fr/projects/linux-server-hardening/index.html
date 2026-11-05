@@ -59,68 +59,14 @@
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Un serveur fraîchement installé, sans aucune protection. Chaque exigence (accès, séparation des données, sauvegardes, disponibilité, traçabilité) devait être satisfaite et démontrée, pas seulement configurée.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Mettre le serveur au niveau du cahier des charges en sept jours, prouver chaque protection par un test, et terminer la semaine par un auto-audit honnête.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Un serveur Ubuntu 24.04 dans un conteneur Docker, sur un réseau Docker isolé, à adresse fixe.</li><li>Trois comptes nominatifs : deux administrateurs avec sudo, un compte de service sans shell interactif. Chacun a sa propre paire de clés ed25519 protégée par une passphrase.</li><li>SSH sur un port non standard, connexion root et authentification par mot de passe désactivées ; UFW refuse tout le trafic entrant sauf SSH depuis le sous-réseau d&#39;administration.</li><li>Une tâche nocturne compresse les données comptables, les chiffre avec GPG (AES-256), supprime l&#39;archive en clair et garde sept jours d&#39;historique.</li><li>Nginx supervisé par supervisord ; historique des connexions disponible avec last et lastlog.</li></ul></div></section>
-    <div class="case-figures"><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># sshd -T 2&gt;/dev/null | grep -E &quot;^(port|permitrootlogin|passwordauthentication|pubkeyauthentication) &quot;</span>
-port 2222
-permitrootlogin no
-pubkeyauthentication yes
-passwordauthentication no
-
-<span class="cmd"># ufw status verbose</span>
-Status: active
-Logging: on (low)
-Default: deny (incoming), allow (outgoing), deny (routed)
-New profiles: skip
-
-To                         Action      From
---                         ------      ----
-2222/tcp                   ALLOW IN    192.168.100.0/24          
-
-<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive root@127.0.0.1 true</span>
-Warning: Permanently added &#39;[127.0.0.1]:2222&#39; (ED25519) to the list of known hosts.
-root@127.0.0.1: Permission denied (publickey).
-
-<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive agro@127.0.0.1 true</span>
-agro@127.0.0.1: Permission denied (publickey).
-
-<span class="cmd"># ls -ld /data/comptabilite</span>
-drwxrws--- 2 root comptabilite 4096 Aug 26 09:52 /data/comptabilite</code></pre>
+    <div class="case-figures"><figure class="case-figure">
+    <img src="../../../assets/img/projects/hardening-access.png" width="1268" height="493" alt="Terminal : réglages sshd (port 2222, root et mots de passe interdits), UFW actif en refus par défaut, connexions par mot de passe refusées" loading="lazy">
     <figcaption>Accès : SSH par clés uniquement, pare-feu fermé par défaut, connexions par mot de passe refusées.</figcaption>
-  </figure><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># /root/scripts/backup.sh &amp;&amp; ls -lh /mnt/backup | tail -n 3</span>
-total 4.0K
--rw-r--r-- 1 root root 237 Nov  5 17:44 backup_comptabilite_2026-11-05_174402.tar.gz.gpg
-
-<span class="cmd"># rm -rf /tmp/restore &amp;&amp; mkdir /tmp/restore</span>
-
-<span class="cmd"># time (gpg --batch --decrypt --passphrase-file &quot;$PF&quot; /mnt/backup/backup_comptabilite_2026-11-05_174402.tar.gz.gpg | tar -xz -C /tmp/restore)</span>
-real    0m0.185s
-
-<span class="cmd"># diff -r /data/comptabilite /tmp/restore/comptabilite &amp;&amp; echo &quot;Aucune différence : restauration identique aux données&quot;</span>
-Aucune différence : restauration identique aux données</code></pre>
+  </figure><figure class="case-figure">
+    <img src="../../../assets/img/projects/hardening-backup.png" width="1308" height="233" alt="Terminal : sauvegarde chiffrée créée, restaurée dans un dossier à part et comparée avec diff : aucune différence" loading="lazy">
     <figcaption>Sauvegardes : une sauvegarde ne compte qu&#39;une fois restaurée.</figcaption>
-  </figure><figure class="case-output">
-    <pre class="term" tabindex="0"><code><span class="cmd"># supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
-nginx                            RUNNING   pid 343, uptime 0:00:03
-343 nginx: master process /usr/sbin/nginx -g daemon off;
-344 nginx: worker process
-345 nginx: worker process
-346 nginx: worker process
-347 nginx: worker process
-
-<span class="cmd"># pkill -9 -x nginx; sleep 1; supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
-nginx                            STARTING  
-365 nginx: master process /usr/sbin/nginx -g daemon off;
-366 nginx: worker process
-367 nginx: worker process
-368 nginx: worker process
-369 nginx: worker process
-
-<span class="cmd"># curl -s -o /dev/null -w &quot;HTTP %{http_code}\n&quot; http://127.0.0.1/</span>
-HTTP 200
-
-<span class="cmd"># cat /var/log/nginx-supervisor-err.log | wc -l</span>
-0</code></pre>
+  </figure><figure class="case-figure">
+    <img src="../../../assets/img/projects/hardening-resil.png" width="964" height="433" alt="Terminal : tous les processus Nginx tués, supervisord relance un nouveau processus principal et ses workers, le site répond HTTP 200" loading="lazy">
     <figcaption>Résilience : Nginx revient tout seul après un crash.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Jour 1 : réseau isolé, comptes nominatifs, SSH par clés uniquement et pare-feu. Les clés publiques ont été déposées avec docker cp, car l&#39;authentification par mot de passe n&#39;a jamais été activée, même temporairement.</li><li>Jours 2–3 : dossier comptable dédié avec le bit SGID ; script de sauvegarde chiffrée avec rotation sur sept jours, puis test de restauration complet.</li><li>Jours 4–5 : redémarrage automatique du service web et traçabilité des connexions.</li><li>Jour 6 : incident non annoncé (un client affirme avoir reçu une facture jamais commandée), investigué sans connaître la réponse.</li><li>Jour 7 : auto-audit de chaque exigence et rapport de mission.</li></ul></div></section>
