@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>A TCP port scanner in Rust, rewritten three times · Rachidi AGRO</title>
-  <meta name="description" content="Sequential, then multithreaded, then asynchronous with Tokio: each version fixes the main weakness of the previous one, and the write-up explains the memory and speed trade-offs rather than just the code.">
+  <meta name="description" content="I wanted to learn Rust on something useful, so I wrote a port scanner, then rewrote it twice once I understood why the previous version was slow or wasteful.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="A TCP port scanner in Rust, rewritten three times · Rachidi AGRO">
-  <meta property="og:description" content="Sequential, then multithreaded, then asynchronous with Tokio: each version fixes the main weakness of the previous one, and the write-up explains the memory and speed trade-offs rather than just the code.">
+  <meta property="og:description" content="I wanted to learn Rust on something useful, so I wrote a port scanner, then rewrote it twice once I understood why the previous version was slow or wasteful.">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://agro-rachidi.github.io/projects/rust-port-scanner/">
   <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/rust-port-scanner/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
     <p class="eyebrow">Systems programming · concurrency</p>
     <h1>A TCP port scanner in Rust, rewritten three times</h1>
-    <p class="lead">Sequential, then multithreaded, then asynchronous with Tokio: each version fixes the main weakness of the previous one, and the write-up explains the memory and speed trade-offs rather than just the code.</p>
+    <p class="lead">I wanted to learn Rust on something useful, so I wrote a port scanner, then rewrote it twice once I understood why the previous version was slow or wasteful.</p>
     <dl class="facts">
       <div><dt>Period</dt><dd>Summer 2026 · three weeks</dd></div>
       <div><dt>Status</dt><dd>Completed · personal project</dd></div>
@@ -62,21 +62,21 @@
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1: a sequential loop with connect_timeout.</li><li>Version 2: ports split across OS threads, results sent back over an mpsc channel. The total time depends on the busiest thread, not on the sum of all ports.</li><li>Version 3: lightweight async tasks with Tokio, and a semaphore capping simultaneous connections at 5,000 so the system and the network are not flooded.</li></ul></div></section>
     
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Wrote the three versions in sequence, keeping the earlier ones as comments before turning them back into standalone files for the repository.</li><li>Documented the cost of each approach: about 2 MB of stack per OS thread, plus creation and scheduling overhead, against much lighter async tasks.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficulties and how I solved them</h2><div class="case-body"><ul><li>Version 2 was fast (under a second with 1,000 threads, in my tests) but spending 1,000 threads on a few seconds of work is a poor trade. Accepting that a working solution was still the wrong one is what led to version 3.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>Version 2 was fast (under a second with 1,000 threads, in my tests) but spending 1,000 threads on a few seconds of work is a poor trade. Accepting that a working solution was still the wrong one is what led to version 3.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">Verification log</h2>
+  <h2 id="verification-h">How I checked it</h2>
   <div class="case-body">
-    <p class="muted small">Each claim, the test used to check it, and what was observed.</p>
-    <div class="table-scroll" role="region" aria-label="Verification log" tabindex="0">
+    <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
+    <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
     <table class="ledger">
-      <thead><tr><th scope="col">Claim</th><th scope="col">How it was tested</th><th scope="col">Observed result</th></tr></thead>
+      <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
       <tbody><tr><th scope="row">Async version is faster and lighter</th><td>Timed full-range scans of each version on my machine</td><td><span class="ok-dot" aria-hidden="true"></span>About 0.13 s for 65,535 ports with 5,000 tasks (informal measurement)</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>Three working versions and a written comparison of threads with channels versus async tasks.</li><li>A habit I kept: question a working solution when its cost is out of proportion.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Known limits</h2><div class="case-body"><ul><li>TCP connect scan only; no service detection.</li><li>Timings are informal: the target and network conditions were not recorded, so they show orders of magnitude, not a benchmark.</li><li>To be used only on systems I own or am authorised to test.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>TCP connect scan only; no service detection.</li><li>Timings are informal: the target and network conditions were not recorded, so they show orders of magnitude, not a benchmark.</li><li>To be used only on systems I own or am authorised to test.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>A reproducible benchmark (fixed target, repeated runs, median)</li><li>Command-line arguments instead of interactive input</li><li>Basic banner grabbing</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer">Repository: the three versions</a> <span class="muted small">github.com/AGRO-Rachidi/port-scanner-rust</span></li></ul></div></section>
   </div>
@@ -90,7 +90,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Rachidi Tchêgoun AGRO</p>
-      <p class="muted">Cybersecurity · Networks · Linux Systems</p>
+      <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Cassandra in practice: a 3-node cluster, a failure test and ten years of data · Rachidi AGRO</title>
-  <meta name="description" content="For our Information Systems course, my group studied the wide-column model end to end: a Cassandra schema designed from the queries, a 3-node cluster in Docker that kept answering at QUORUM with one node down, and a benchmark against PostgreSQL over 17.5 million rows.">
+  <meta name="description" content="With two classmates, I explored how Cassandra copes with large amounts of data: we designed the schema around our queries, ran a 3-node cluster that kept answering with one node down, and compared it with PostgreSQL over ten years of simulated sensor data.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Cassandra in practice: a 3-node cluster, a failure test and ten years of data · Rachidi AGRO">
-  <meta property="og:description" content="For our Information Systems course, my group studied the wide-column model end to end: a Cassandra schema designed from the queries, a 3-node cluster in Docker that kept answering at QUORUM with one node down, and a benchmark against PostgreSQL over 17.5 million rows.">
+  <meta property="og:description" content="With two classmates, I explored how Cassandra copes with large amounts of data: we designed the schema around our queries, ran a 3-node cluster that kept answering with one node down, and compared it with PostgreSQL over ten years of simulated sensor data.">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://agro-rachidi.github.io/projects/cassandra-vs-postgresql/">
   <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/cassandra-vs-postgresql/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
     <p class="eyebrow">Databases · distributed systems</p>
     <h1>Cassandra in practice: a 3-node cluster, a failure test and ten years of data</h1>
-    <p class="lead">For our Information Systems course, my group studied the wide-column model end to end: a Cassandra schema designed from the queries, a 3-node cluster in Docker that kept answering at QUORUM with one node down, and a benchmark against PostgreSQL over 17.5 million rows.</p>
+    <p class="lead">With two classmates, I explored how Cassandra copes with large amounts of data: we designed the schema around our queries, ran a 3-node cluster that kept answering with one node down, and compared it with PostgreSQL over ten years of simulated sensor data.</p>
     <dl class="facts">
       <div><dt>Period</dt><dd>October – November 2026</dd></div>
       <div><dt>Status</dt><dd>Completed · group project (3 students)</dd></div>
@@ -65,21 +65,21 @@
     <figcaption>Failure test: one node down, the QUORUM read still succeeds.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What we did</h2><div class="case-body"><ul><li>Explained the model in the report: the Bigtable data model, Murmur3 partitioning, replication, tunable consistency, write and read paths, and a comparison with HBase and relational systems.</li><li>Built the cluster and the IoT case study, and kept the real cqlsh and nodetool outputs as evidence.</li><li>Ran the ten-year benchmark and a PostgreSQL → Cassandra migration with verification scripts.</li><li>Wrote the report and the presentation in LaTeX.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficulties and how I solved them</h2><div class="case-body"><ul><li>With RF = 3 on three nodes, every node holds 100 % of the data, so replication was visible but partitioning was not. A second keyspace at RF = 1 and nodetool getendpoints showed which node owns which sensor.</li><li>One laptop cannot host the assignment&#39;s full data rate. We lowered the reading interval from 10 seconds to 15 minutes and said so, explaining how it changes the results.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>With RF = 3 on three nodes, every node holds 100 % of the data, so replication was visible but partitioning was not. A second keyspace at RF = 1 and nodetool getendpoints showed which node owns which sensor.</li><li>One laptop cannot host the assignment&#39;s full data rate. We lowered the reading interval from 10 seconds to 15 minutes and said so, explaining how it changes the results.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">Verification log</h2>
+  <h2 id="verification-h">How I checked it</h2>
   <div class="case-body">
-    <p class="muted small">Each claim, the test used to check it, and what was observed.</p>
-    <div class="table-scroll" role="region" aria-label="Verification log" tabindex="0">
+    <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
+    <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
     <table class="ledger">
-      <thead><tr><th scope="col">Claim</th><th scope="col">How it was tested</th><th scope="col">Observed result</th></tr></thead>
+      <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
       <tbody><tr><th scope="row">The cluster survives one node down</th><td>docker stop cass3, then query Q1 again from cass1 at QUORUM</td><td><span class="ok-dot" aria-hidden="true"></span>Query succeeded (two replicas of three still available)</td></tr><tr><th scope="row">Read time does not grow with history</th><td>Key lookups measured after each year loaded, 1 to 10 years</td><td><span class="ok-dot" aria-hidden="true"></span>Cassandra flat at 3–5 ms; PostgreSQL 0.3–1.6 ms, slowly rising</td></tr><tr><th scope="row">Writes and storage favour Cassandra</th><td>Single-row write throughput; disk usage after 10 years</td><td><span class="ok-dot" aria-hidden="true"></span>2,504 vs 305 writes/s · 349 MB vs 1,755 MB</td></tr><tr><th scope="row">Unplanned questions are the weak point</th><td>Query outside the partition keys over 10 years</td><td><span class="ok-dot" aria-hidden="true"></span>Cassandra timed out at 12 s (20.7 s when raised); PostgreSQL answered in 16–24 s</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>A clear picture of the trade-off: Cassandra keeps planned queries fast whatever the history depth, writes and stores efficiently, but needs every question decided before the first write.</li><li>Design lesson: in a wide-column database, modelling is about access paths as much as about data.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Known limits</h2><div class="case-body"><ul><li>All nodes on one machine: nothing is measured about scaling out, Cassandra&#39;s main advantage.</li><li>Timings include the Python drivers and the Docker network.</li><li>Group work: the report and code are shared by the three authors.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>All nodes on one machine: nothing is measured about scaling out, Cassandra&#39;s main advantage.</li><li>Timings include the Python drivers and the Docker network.</li><li>Group work: the report and code are shared by the three authors.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Repeat the benchmark on several machines</li><li>Measure at the original 10-second rate on a smaller time window</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/cassandra-wide-column-study" rel="noopener noreferrer">Repository: report, CQL, benchmark, raw results</a> <span class="muted small">github.com/AGRO-Rachidi/cassandra-wide-column-study</span></li></ul></div></section>
   </div>
@@ -93,7 +93,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Rachidi Tchêgoun AGRO</p>
-      <p class="muted">Cybersecurity · Networks · Linux Systems</p>
+      <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

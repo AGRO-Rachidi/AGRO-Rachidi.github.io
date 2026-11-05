@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données · Rachidi AGRO</title>
-  <meta name="description" content="Pour notre cours de systèmes d&#39;information, mon groupe a étudié le modèle orienté colonnes de bout en bout : un schéma Cassandra conçu à partir des requêtes, un cluster de 3 nœuds sous Docker qui continue de répondre en QUORUM avec un nœud arrêté, et un banc de mesure face à PostgreSQL sur 17,5 millions de lignes.">
+  <meta name="description" content="Avec deux camarades, j&#39;ai exploré la façon dont Cassandra gère de gros volumes de données : nous avons conçu le schéma à partir de nos requêtes, fait tourner un cluster de 3 nœuds qui répondait encore avec un nœud arrêté, et comparé Cassandra à PostgreSQL sur dix ans de mesures de capteurs simulées.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données · Rachidi AGRO">
-  <meta property="og:description" content="Pour notre cours de systèmes d&#39;information, mon groupe a étudié le modèle orienté colonnes de bout en bout : un schéma Cassandra conçu à partir des requêtes, un cluster de 3 nœuds sous Docker qui continue de répondre en QUORUM avec un nœud arrêté, et un banc de mesure face à PostgreSQL sur 17,5 millions de lignes.">
+  <meta property="og:description" content="Avec deux camarades, j&#39;ai exploré la façon dont Cassandra gère de gros volumes de données : nous avons conçu le schéma à partir de nos requêtes, fait tourner un cluster de 3 nœuds qui répondait encore avec un nœud arrêté, et comparé Cassandra à PostgreSQL sur dix ans de mesures de capteurs simulées.">
   <meta property="og:locale" content="fr_FR">
   <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/cassandra-vs-postgresql/">
   <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/cassandra-vs-postgresql/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
     <p class="eyebrow">Bases de données · systèmes distribués</p>
     <h1>Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données</h1>
-    <p class="lead">Pour notre cours de systèmes d&#39;information, mon groupe a étudié le modèle orienté colonnes de bout en bout : un schéma Cassandra conçu à partir des requêtes, un cluster de 3 nœuds sous Docker qui continue de répondre en QUORUM avec un nœud arrêté, et un banc de mesure face à PostgreSQL sur 17,5 millions de lignes.</p>
+    <p class="lead">Avec deux camarades, j&#39;ai exploré la façon dont Cassandra gère de gros volumes de données : nous avons conçu le schéma à partir de nos requêtes, fait tourner un cluster de 3 nœuds qui répondait encore avec un nœud arrêté, et comparé Cassandra à PostgreSQL sur dix ans de mesures de capteurs simulées.</p>
     <dl class="facts">
       <div><dt>Période</dt><dd>Octobre – novembre 2026</dd></div>
       <div><dt>Statut</dt><dd>Terminé · projet de groupe (3 étudiants)</dd></div>
@@ -65,21 +65,21 @@
     <figcaption>Test de panne : un nœud arrêté, la lecture en QUORUM réussit toujours.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que nous avons fait</h2><div class="case-body"><ul><li>Explication du modèle dans le rapport : modèle de données Bigtable, partitionnement Murmur3, réplication, cohérence ajustable, chemins d&#39;écriture et de lecture, comparaison avec HBase et le relationnel.</li><li>Construction du cluster et de l&#39;étude de cas IoT, avec conservation des sorties réelles de cqlsh et nodetool comme preuves.</li><li>Banc de mesure sur dix ans et migration PostgreSQL → Cassandra avec scripts de vérification.</li><li>Rédaction du rapport et de la présentation en LaTeX.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficultés et solutions</h2><div class="case-body"><ul><li>Avec RF = 3 sur trois nœuds, chaque nœud détient 100 % des données : la réplication était visible, pas le partitionnement. Un second keyspace en RF = 1 et nodetool getendpoints ont montré quel nœud possède quel capteur.</li><li>Un seul ordinateur ne peut pas absorber le débit de l&#39;énoncé. Nous avons ramené l&#39;intervalle de mesure de 10 secondes à 15 minutes, et nous l&#39;avons écrit en expliquant l&#39;effet sur les résultats.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>Avec RF = 3 sur trois nœuds, chaque nœud détient 100 % des données : la réplication était visible, pas le partitionnement. Un second keyspace en RF = 1 et nodetool getendpoints ont montré quel nœud possède quel capteur.</li><li>Un seul ordinateur ne peut pas absorber le débit de l&#39;énoncé. Nous avons ramené l&#39;intervalle de mesure de 10 secondes à 15 minutes, et nous l&#39;avons écrit en expliquant l&#39;effet sur les résultats.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">Journal de vérification</h2>
+  <h2 id="verification-h">Comment je l’ai vérifié</h2>
   <div class="case-body">
-    <p class="muted small">Chaque affirmation, le test utilisé pour la vérifier et ce qui a été observé.</p>
-    <div class="table-scroll" role="region" aria-label="Journal de vérification" tabindex="0">
+    <p class="muted small">Ce que je voulais prouver, le test que j’ai fait, et ce que j’ai réellement observé.</p>
+    <div class="table-scroll" role="region" aria-label="Comment je l’ai vérifié" tabindex="0">
     <table class="ledger">
-      <thead><tr><th scope="col">Affirmation</th><th scope="col">Comment c’est testé</th><th scope="col">Résultat observé</th></tr></thead>
+      <thead><tr><th scope="col">Ce que je voulais prouver</th><th scope="col">Le test</th><th scope="col">Ce que j’ai observé</th></tr></thead>
       <tbody><tr><th scope="row">Le cluster survit à l&#39;arrêt d&#39;un nœud</th><td>docker stop cass3, puis relance de la requête Q1 depuis cass1 en QUORUM</td><td><span class="ok-dot" aria-hidden="true"></span>Requête réussie (deux copies sur trois encore disponibles)</td></tr><tr><th scope="row">Le temps de lecture ne croît pas avec l&#39;historique</th><td>Lectures par clé mesurées après chaque année chargée, de 1 à 10 ans</td><td><span class="ok-dot" aria-hidden="true"></span>Cassandra stable à 3–5 ms ; PostgreSQL 0,3–1,6 ms, en légère hausse</td></tr><tr><th scope="row">Écritures et stockage favorisent Cassandra</th><td>Débit d&#39;écriture unitaire ; espace disque après 10 ans</td><td><span class="ok-dot" aria-hidden="true"></span>2 504 contre 305 écritures/s · 349 Mo contre 1 755 Mo</td></tr><tr><th scope="row">Les questions imprévues sont le point faible</th><td>Requête hors clés de partition sur 10 ans</td><td><span class="ok-dot" aria-hidden="true"></span>Cassandra en échec à 12 s (20,7 s avec le délai relevé) ; PostgreSQL a répondu en 16–24 s</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Une image claire du compromis : Cassandra garde les requêtes prévues rapides quelle que soit la profondeur de l&#39;historique, écrit et stocke efficacement, mais exige que chaque question soit décidée avant la première écriture.</li><li>Leçon de conception : dans une base orientée colonnes, modéliser, c&#39;est concevoir les chemins d&#39;accès autant que les données.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites connues</h2><div class="case-body"><ul><li>Tous les nœuds sur une seule machine : rien n&#39;est mesuré sur l&#39;ajout de machines, le principal atout de Cassandra.</li><li>Les temps incluent les pilotes Python et le réseau Docker.</li><li>Travail de groupe : le rapport et le code appartiennent aux trois auteurs.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Tous les nœuds sur une seule machine : rien n&#39;est mesuré sur l&#39;ajout de machines, le principal atout de Cassandra.</li><li>Les temps incluent les pilotes Python et le réseau Docker.</li><li>Travail de groupe : le rapport et le code appartiennent aux trois auteurs.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Refaire le banc de mesure sur plusieurs machines</li><li>Mesurer au débit d&#39;origine (10 s) sur une fenêtre de temps plus courte</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/cassandra-wide-column-study" rel="noopener noreferrer">Dépôt : rapport, CQL, banc de mesure, résultats bruts</a> <span class="muted small">github.com/AGRO-Rachidi/cassandra-wide-column-study</span></li></ul></div></section>
   </div>
@@ -93,7 +93,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Rachidi Tchêgoun AGRO</p>
-      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux</p>
+      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

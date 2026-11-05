@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Un scanner de ports TCP en Rust, réécrit trois fois · Rachidi AGRO</title>
-  <meta name="description" content="Séquentiel, puis multithreadé, puis asynchrone avec Tokio : chaque version corrige le principal défaut de la précédente, et la documentation explique les compromis mémoire et vitesse plutôt que le seul code.">
+  <meta name="description" content="Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Un scanner de ports TCP en Rust, réécrit trois fois · Rachidi AGRO">
-  <meta property="og:description" content="Séquentiel, puis multithreadé, puis asynchrone avec Tokio : chaque version corrige le principal défaut de la précédente, et la documentation explique les compromis mémoire et vitesse plutôt que le seul code.">
+  <meta property="og:description" content="Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.">
   <meta property="og:locale" content="fr_FR">
   <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/rust-port-scanner/">
   <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/rust-port-scanner/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
     <p class="eyebrow">Programmation système · concurrence</p>
     <h1>Un scanner de ports TCP en Rust, réécrit trois fois</h1>
-    <p class="lead">Séquentiel, puis multithreadé, puis asynchrone avec Tokio : chaque version corrige le principal défaut de la précédente, et la documentation explique les compromis mémoire et vitesse plutôt que le seul code.</p>
+    <p class="lead">Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.</p>
     <dl class="facts">
       <div><dt>Période</dt><dd>Été 2026 · trois semaines</dd></div>
       <div><dt>Statut</dt><dd>Terminé · projet personnel</dd></div>
@@ -62,21 +62,21 @@
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1 : une boucle séquentielle avec connect_timeout.</li><li>Version 2 : les ports répartis entre des threads système, résultats renvoyés par un canal mpsc. Le temps total dépend du thread le plus chargé, pas de la somme des ports.</li><li>Version 3 : des tâches asynchrones légères avec Tokio, et un sémaphore qui plafonne les connexions simultanées à 5 000 pour ne saturer ni le système ni le réseau.</li></ul></div></section>
     
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Écriture des trois versions l&#39;une après l&#39;autre, en gardant les précédentes en commentaire avant d&#39;en refaire des fichiers autonomes pour le dépôt.</li><li>Documentation du coût de chaque approche : environ 2 Mo de pile par thread système, plus le coût de création et d&#39;ordonnancement, contre des tâches asynchrones bien plus légères.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficultés et solutions</h2><div class="case-body"><ul><li>La version 2 était rapide (moins d&#39;une seconde avec 1 000 threads, dans mes essais), mais consacrer 1 000 threads à quelques secondes de travail est un mauvais compromis. Accepter qu&#39;une solution qui marche puisse rester la mauvaise est ce qui m&#39;a conduit à la version 3.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>La version 2 était rapide (moins d&#39;une seconde avec 1 000 threads, dans mes essais), mais consacrer 1 000 threads à quelques secondes de travail est un mauvais compromis. Accepter qu&#39;une solution qui marche puisse rester la mauvaise est ce qui m&#39;a conduit à la version 3.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">Journal de vérification</h2>
+  <h2 id="verification-h">Comment je l’ai vérifié</h2>
   <div class="case-body">
-    <p class="muted small">Chaque affirmation, le test utilisé pour la vérifier et ce qui a été observé.</p>
-    <div class="table-scroll" role="region" aria-label="Journal de vérification" tabindex="0">
+    <p class="muted small">Ce que je voulais prouver, le test que j’ai fait, et ce que j’ai réellement observé.</p>
+    <div class="table-scroll" role="region" aria-label="Comment je l’ai vérifié" tabindex="0">
     <table class="ledger">
-      <thead><tr><th scope="col">Affirmation</th><th scope="col">Comment c’est testé</th><th scope="col">Résultat observé</th></tr></thead>
+      <thead><tr><th scope="col">Ce que je voulais prouver</th><th scope="col">Le test</th><th scope="col">Ce que j’ai observé</th></tr></thead>
       <tbody><tr><th scope="row">La version async est plus rapide et plus légère</th><td>Chronométrage des balayages complets de chaque version sur ma machine</td><td><span class="ok-dot" aria-hidden="true"></span>Environ 0,13 s pour 65 535 ports avec 5 000 tâches (mesure informelle)</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Trois versions fonctionnelles et une comparaison écrite entre threads avec canaux et tâches asynchrones.</li><li>Une habitude conservée : remettre en question une solution qui marche quand son coût est disproportionné.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites connues</h2><div class="case-body"><ul><li>Balayage TCP connect uniquement ; pas de détection de services.</li><li>Les temps sont informels : la cible et les conditions réseau n&#39;ont pas été notées. Ils donnent des ordres de grandeur, pas un banc de mesure.</li><li>À utiliser uniquement sur des systèmes qui m&#39;appartiennent ou que je suis autorisé à tester.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Balayage TCP connect uniquement ; pas de détection de services.</li><li>Les temps sont informels : la cible et les conditions réseau n&#39;ont pas été notées. Ils donnent des ordres de grandeur, pas un banc de mesure.</li><li>À utiliser uniquement sur des systèmes qui m&#39;appartiennent ou que je suis autorisé à tester.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Un banc de mesure reproductible (cible fixe, répétitions, médiane)</li><li>Des arguments en ligne de commande plutôt qu&#39;une saisie interactive</li><li>Une lecture simple des bannières de service</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer">Dépôt : les trois versions</a> <span class="muted small">github.com/AGRO-Rachidi/port-scanner-rust</span></li></ul></div></section>
   </div>
@@ -90,7 +90,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Rachidi Tchêgoun AGRO</p>
-      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux</p>
+      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Securing a Linux server in seven days · Rachidi AGRO</title>
-  <meta name="description" content="Took over a simulated accounting server with production requirements: key-only SSH, default-deny firewall, encrypted backups proven by a real restore, self-healing web service, and an incident investigation.">
+  <meta name="description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and proved each step with a test. In November 2026 I went back to the same container and ran the checks again: the screenshots below come from that session.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Securing a Linux server in seven days · Rachidi AGRO">
-  <meta property="og:description" content="Took over a simulated accounting server with production requirements: key-only SSH, default-deny firewall, encrypted backups proven by a real restore, self-healing web service, and an incident investigation.">
+  <meta property="og:description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and proved each step with a test. In November 2026 I went back to the same container and ran the checks again: the screenshots below come from that session.">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
   <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
     <p class="eyebrow">Linux &amp; systems security</p>
     <h1>Securing a Linux server in seven days</h1>
-    <p class="lead">Took over a simulated accounting server with production requirements: key-only SSH, default-deny firewall, encrypted backups proven by a real restore, self-healing web service, and an incident investigation.</p>
+    <p class="lead">During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and proved each step with a test. In November 2026 I went back to the same container and ran the checks again: the screenshots below come from that session.</p>
     <dl class="facts">
       <div><dt>Period</dt><dd>Aug 25 – 31, 2026 · 7 days</dd></div>
       <div><dt>Status</dt><dd>Completed · internship lab</dd></div>
@@ -60,24 +60,33 @@
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>A freshly installed server with no protection. Every requirement (access, data separation, backups, availability, traceability) had to be met and demonstrated, not just configured.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Bring the server to the specification in seven days, prove each control with a test, and close the week with an honest self-audit.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Ubuntu 24.04 server in a Docker container, on its own isolated Docker network with a fixed address.</li><li>Three named accounts: two administrators with sudo, one service account with no interactive shell. Each has its own ed25519 key pair protected by a passphrase.</li><li>SSH on a non-default port, root login and password authentication disabled; UFW denies all incoming traffic except SSH from the administration subnet.</li><li>A nightly job compresses the accounting data, encrypts it with GPG (AES-256), deletes the clear archive and keeps seven days of history.</li><li>Nginx supervised by supervisord; connection history available through last and lastlog.</li></ul></div></section>
-    
+    <div class="case-figures"><figure class="case-figure">
+    <img src="../../assets/img/projects/hardening-access.png" width="1440" height="616" alt="Terminal: sshd settings (port 2222, root login and passwords disabled), UFW active with default deny, and two password login attempts refused" loading="lazy">
+    <figcaption>Access: key-only SSH, default-deny firewall, password logins refused. Real output, re-run on 5 November 2026 in the original project container.</figcaption>
+  </figure><figure class="case-figure">
+    <img src="../../assets/img/projects/hardening-backup.png" width="1485" height="301" alt="Terminal: encrypted backup created, then restored to a temporary folder and compared with diff: no difference" loading="lazy">
+    <figcaption>Backups: a backup only counts once it has been restored. Real output, re-run on 5 November 2026 in the original project container.</figcaption>
+  </figure><figure class="case-figure">
+    <img src="../../assets/img/projects/hardening-resil.png" width="1026" height="511" alt="Terminal: all Nginx processes killed, supervisord starts a new master with new workers, site answers HTTP 200" loading="lazy">
+    <figcaption>Resilience: Nginx comes back on its own after a crash. Real output, re-run on 5 November 2026 in the original project container.</figcaption>
+  </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Day 1: isolated network, named accounts, key-only SSH and firewall. Public keys were copied in with docker cp, because password authentication was never enabled, not even temporarily.</li><li>Days 2–3: dedicated accounting folder with the SGID bit; encrypted backup script with seven-day rotation, then a full restore test.</li><li>Days 4–5: automatic restart of the web service, and connection traceability.</li><li>Day 6: an unannounced incident (a customer claims to have received an invoice they never ordered), investigated without knowing the answer.</li><li>Day 7: self-audit of every requirement and a mission report.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficulties and how I solved them</h2><div class="case-body"><ul><li>UFW would not start: a standard container lacks the kernel capabilities it needs. I froze the work with docker commit and recreated the container with NET_ADMIN and NET_RAW, without losing anything.</li><li>No systemd or journald inside the container, so the usual tools for automatic restart and logs were missing. I used supervisord for the service and last/lastlog for connection history, which work without systemd.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>UFW would not start: a standard container lacks the kernel capabilities it needs. I froze the work with docker commit and recreated the container with NET_ADMIN and NET_RAW, without losing anything.</li><li>No systemd or journald inside the container, so the usual tools for automatic restart and logs were missing. I used supervisord for the service and last/lastlog for connection history, which work without systemd.</li><li>Going back in November taught me two more things. After the container restarted, the firewall and the services did not come back by themselves: a container has no init system to start them. And killing only Nginx&#39;s master process leaves its workers holding port 80, so the restarted master cannot bind to it, while the site still seems to answer. Testing properly means killing every Nginx process, and the real fix is a start-up script.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">Verification log</h2>
+  <h2 id="verification-h">How I checked it</h2>
   <div class="case-body">
-    <p class="muted small">Each claim, the test used to check it, and what was observed.</p>
-    <div class="table-scroll" role="region" aria-label="Verification log" tabindex="0">
+    <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
+    <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
     <table class="ledger">
-      <thead><tr><th scope="col">Claim</th><th scope="col">How it was tested</th><th scope="col">Observed result</th></tr></thead>
-      <tbody><tr><th scope="row">Root cannot log in over SSH</th><td>Attempted a root login</td><td><span class="ok-dot" aria-hidden="true"></span>Refused</td></tr><tr><th scope="row">Keys only, no passwords</th><td>Key login, then password login</td><td><span class="ok-dot" aria-hidden="true"></span>Key accepted · password refused</td></tr><tr><th scope="row">Backups can be restored within the RTO</th><td>Moved the real folder away (total loss), restored the latest encrypted archive, compared file by file with diff</td><td><span class="ok-dot" aria-hidden="true"></span>No difference · a few minutes, well under 30 min</td></tr><tr><th scope="row">The web service heals itself</th><td>kill -9 on the Nginx process</td><td><span class="ok-dot" aria-hidden="true"></span>Restarted automatically in under one second</td></tr><tr><th scope="row">The suspicious invoice did not come from the server</th><td>Reviewed admin logins, scheduled tasks, Nginx logs and the accounting folder</td><td><span class="ok-dot" aria-hidden="true"></span>No sign of compromise; the server has no invoicing feature. Likely phishing aimed at the customer</td></tr></tbody>
+      <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
+      <tbody><tr><th scope="row">Root cannot log in over SSH</th><td>Attempted a root login</td><td><span class="ok-dot" aria-hidden="true"></span>Refused</td></tr><tr><th scope="row">Keys only, no passwords</th><td>Key login, then password login</td><td><span class="ok-dot" aria-hidden="true"></span>Key accepted · password refused</td></tr><tr><th scope="row">Backups can be restored within the RTO</th><td>Restored the latest encrypted archive into a temporary folder and compared it file by file with diff</td><td><span class="ok-dot" aria-hidden="true"></span>No difference · decrypted and restored in 0.19 s (small test dataset; a few minutes during the mission)</td></tr><tr><th scope="row">The web service heals itself</th><td>Killed every Nginx process at once (pkill -9)</td><td><span class="ok-dot" aria-hidden="true"></span>New master process within a second, site answers HTTP 200, no error in the logs</td></tr><tr><th scope="row">The suspicious invoice did not come from the server</th><td>Reviewed admin logins, scheduled tasks, Nginx logs and the accounting folder</td><td><span class="ok-dot" aria-hidden="true"></span>No sign of compromise; the server has no invoicing feature. Likely phishing aimed at the customer</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>All seven controls of the final audit met: SSH root blocked, key-only authentication, default-deny firewall, encryption at rest with seven-day rotation, restore tested and timed, automatic restart, consultable connection history.</li><li>A lesson I kept: finding nothing abnormal in an investigation is a result. It points to another explanation.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Known limits</h2><div class="case-body"><ul><li>A simulated server in a container, not a production machine with real users.</li><li>The backup passphrase is stored on the server itself. In production it should live in an external secrets manager.</li><li>The scripts in the repository were rebuilt after the container was deleted. They reproduce the commands documented in the original report, and the repository says so.</li></ul></div></section>
-    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Move the backup secret to a dedicated secrets manager</li><li>Forward logs to a central collector or SIEM instead of reading them on the host</li><li>Automate the final audit as a repeatable compliance check</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>A simulated server in a container, not a production machine with real users.</li><li>After a container restart, SSH, the firewall and supervisord have to be started again by hand.</li><li>The backup passphrase is stored on the server itself. In production it should live in an external secrets manager.</li><li>The scripts in the repository were rebuilt after the container was deleted. They reproduce the commands documented in the original report, and the repository says so.</li></ul></div></section>
+    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Add an entrypoint script that starts SSH, UFW and supervisord whenever the container boots</li><li>Move the backup secret to a dedicated secrets manager</li><li>Forward logs to a central collector or SIEM instead of reading them on the host</li><li>Automate the final audit as a repeatable compliance check</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer">Repository: scripts and mission report</a> <span class="muted small">github.com/AGRO-Rachidi/linux-sysadmin-hardening</span></li></ul></div></section>
   </div>
   <nav class="wrap pager" aria-label="More projects">
@@ -90,7 +99,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Rachidi Tchêgoun AGRO</p>
-      <p class="muted">Cybersecurity · Networks · Linux Systems</p>
+      <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

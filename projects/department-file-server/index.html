@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>A department-isolated file server, from Unix groups to Samba · Rachidi AGRO</title>
-  <meta name="description" content="Four departments, eleven employees, one rule: each team sees only its own files. Built with groups, SGID and POSIX ACLs, automated with an idempotent Bash script, shared over the network with Samba, and tested from a real SMB client.">
+  <meta name="description" content="Four departments, seven employee accounts, and one simple rule: each team sees only its own files. I built it with Unix groups and ACLs, automated it with a Bash script that can safely be run again, and shared it over the network with Samba. I reproduced it in November 2026 with my original script to capture the evidence below.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="A department-isolated file server, from Unix groups to Samba · Rachidi AGRO">
-  <meta property="og:description" content="Four departments, eleven employees, one rule: each team sees only its own files. Built with groups, SGID and POSIX ACLs, automated with an idempotent Bash script, shared over the network with Samba, and tested from a real SMB client.">
+  <meta property="og:description" content="Four departments, seven employee accounts, and one simple rule: each team sees only its own files. I built it with Unix groups and ACLs, automated it with a Bash script that can safely be run again, and shared it over the network with Samba. I reproduced it in November 2026 with my original script to capture the evidence below.">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://agro-rachidi.github.io/projects/department-file-server/">
   <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/department-file-server/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
     <p class="eyebrow">Linux administration · access control</p>
     <h1>A department-isolated file server, from Unix groups to Samba</h1>
-    <p class="lead">Four departments, eleven employees, one rule: each team sees only its own files. Built with groups, SGID and POSIX ACLs, automated with an idempotent Bash script, shared over the network with Samba, and tested from a real SMB client.</p>
+    <p class="lead">Four departments, seven employee accounts, and one simple rule: each team sees only its own files. I built it with Unix groups and ACLs, automated it with a Bash script that can safely be run again, and shared it over the network with Samba. I reproduced it in November 2026 with my original script to capture the evidence below.</p>
     <dl class="facts">
       <div><dt>Period</dt><dd>August 2026</dd></div>
       <div><dt>Status</dt><dd>Completed · internship lab</dd></div>
@@ -56,27 +56,36 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-permissions-multiservice" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: script, Samba configuration, reports</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Second project of the systems part of my internship at FusionSoft Labs: a file server for « TechCorp », a fictional company with HR, IT, Finance and Management, eleven employees in total, built in an isolated container lab.</p></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Second project of the systems part of my internship at FusionSoft Labs: a file server for « TechCorp », a fictional company with HR, IT, Finance and Management, built in an isolated container lab.</p></div></section>
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>Each department must reach its own documents and a common space, and nothing else. The setup also had to be reproducible: typing the same seven commands per department by hand had already produced real mistakes.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Least privilege on disk, the same guarantees over the network, and a setup script that can be run again safely.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Unix group and one folder per department, mode 770 with the SGID bit, plus a common folder reached through a shared secondary group.</li><li>POSIX ACLs on the parent folder grant each department the traverse right (x) only.</li><li>An idempotent Bash script with three functions (create service, create users, set up folders) that checks the current state before acting.</li><li>Samba shares under /srv (per the Filesystem Hierarchy Standard), one per group: valid users = @group, create mask 0660, configuration validated with testparm.</li></ul></div></section>
-    
+    <div class="case-figures"><figure class="case-figure">
+    <img src="../../assets/img/projects/techcorp-idem.png" width="1026" height="1099" alt="Terminal: first run of techcorp_setup.sh creates 4 groups, folders and 7 users; the second run only reports that everything already exists" loading="lazy">
+    <figcaption>Idempotence: the second run changes nothing. Reproduced on 5 November 2026 with the original script.</figcaption>
+  </figure><figure class="case-figure">
+    <img src="../../assets/img/projects/techcorp-iso.png" width="1026" height="406" alt="Terminal: folders in 770 with SGID; HR writes in its folder, HR denied on Finance, Finance denied on HR" loading="lazy">
+    <figcaption>Isolation on disk, tested with real employee accounts. Reproduced on 5 November 2026 with the original script.</figcaption>
+  </figure><figure class="case-figure">
+    <img src="../../assets/img/projects/techcorp-smb.png" width="1026" height="658" alt="Terminal: traverse-only ACLs on /srv/samba, Samba share configuration, HR user uploads to the HR share, access denied to other shares" loading="lazy">
+    <figcaption>Over the network: access granted where it should be, NT_STATUS_ACCESS_DENIED everywhere else. Reproduced on 5 November 2026 with the original script.</figcaption>
+  </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Built the model by hand first, then replaced the repetition with a script. Employee entries are stored as user:group and split with Bash parameter expansion, without calling external commands.</li><li>Fixed real scripting bugs along the way: a test that executed a variable instead of evaluating it; useradd failing silently while the script printed « created » (fixed by checking the exit code); comparing a name against the whole getent line instead of its first field.</li><li>Opened the setup to the network with Samba: a system account and a separate Samba account per employee, created in a loop.</li><li>Tested everything with each employee&#39;s real account, never as root.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficulties and how I solved them</h2><div class="case-body"><ul><li>A correctly configured user was still denied access to their own folder. The cause was the parent folder: reaching a file requires the traverse right on every directory of the path. A folder has only one owning group, and « chmod o+x » would have opened traversal to every account on the system, which breaks least privilege. POSIX ACLs (setfacl -m g:&lt;group&gt;:x) solved it without changing the owner.</li><li>SGID guarantees the group of a new file, not that the group can write to it. With the default umask 0022, new files were -rw-r--r--. A working team folder needs both settings, and umask persistence needs a profile file or default ACLs.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>A correctly configured user was still denied access to their own folder. The cause was the parent folder: reaching a file requires the traverse right on every directory of the path. A folder has only one owning group, and « chmod o+x » would have opened traversal to every account on the system, which breaks least privilege. POSIX ACLs (setfacl -m g:&lt;group&gt;:x) solved it without changing the owner.</li><li>SGID guarantees the group of a new file, not that the group can write to it. With the default umask 0022, new files were -rw-r--r--. A working team folder needs both settings, and umask persistence needs a profile file or default ACLs.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">Verification log</h2>
+  <h2 id="verification-h">How I checked it</h2>
   <div class="case-body">
-    <p class="muted small">Each claim, the test used to check it, and what was observed.</p>
-    <div class="table-scroll" role="region" aria-label="Verification log" tabindex="0">
+    <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
+    <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
     <table class="ledger">
-      <thead><tr><th scope="col">Claim</th><th scope="col">How it was tested</th><th scope="col">Observed result</th></tr></thead>
-      <tbody><tr><th scope="row">The script is idempotent</th><td>Ran it, then ran it again unchanged</td><td><span class="ok-dot" aria-hidden="true"></span>Second run only reports « already exists », with no error or duplicate</td></tr><tr><th scope="row">Departments are isolated on disk</th><td>ls and cd tested separately into another department&#39;s folder, with a real employee account</td><td><span class="ok-dot" aria-hidden="true"></span>Denied across departments · allowed within a department and on the common folder</td></tr><tr><th scope="row">The isolation still holds over the network</th><td>smbclient as an HR employee: own share, then another department&#39;s share</td><td><span class="ok-dot" aria-hidden="true"></span>Write confirmed on HR · NT_STATUS_ACCESS_DENIED elsewhere</td></tr></tbody>
+      <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
+      <tbody><tr><th scope="row">The script is idempotent</th><td>Ran it, then ran it again unchanged</td><td><span class="ok-dot" aria-hidden="true"></span>Second run only reports « already exists », with no error or duplicate</td></tr><tr><th scope="row">Departments are isolated on disk</th><td>ls and cd tested separately into another department&#39;s folder, with a real employee account</td><td><span class="ok-dot" aria-hidden="true"></span>Denied across departments · allowed within a department and on the common folder</td></tr><tr><th scope="row">The isolation still holds over the network</th><td>smbclient as an HR employee: own share, then another department&#39;s share</td><td><span class="ok-dot" aria-hidden="true"></span>Write confirmed on HR · NT_STATUS_ACCESS_DENIED elsewhere</td></tr><tr><th scope="row">New files are not group-writable by default</th><td>An HR employee creates a file in the HR folder</td><td><span class="ok-dot" aria-hidden="true"></span>-rw-r--r--: the group can read but not write (umask 022), the pitfall described below</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>A file server where every allowed access works and every forbidden access fails exactly where it should, locally and over SMB.</li><li>A reusable, idempotent provisioning script, and a written explanation of each permission choice.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Known limits</h2><div class="case-body"><ul><li>A lab in a container with fictional accounts, not a company directory.</li><li>Identities are local; there is no central directory (LDAP or Active Directory).</li><li>In the repository, the Samba part is a compilation of commands that were run and validated one by one, not an original script. The README says so.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>A lab in a container with fictional accounts, not a company directory.</li><li>Identities are local; there is no central directory (LDAP or Active Directory).</li><li>In the repository, the Samba part is a compilation of commands that were run and validated one by one, not an original script. The README says so.</li><li>The August container no longer exists. The screenshots come from a November 2026 reproduction in a fresh Ubuntu 24.04 container, using the original script and the documented Samba commands.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Default ACLs so group write no longer depends on each user&#39;s umask</li><li>Central identities with Samba AD or LDAP</li><li>Audit logging of share access</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-permissions-multiservice" rel="noopener noreferrer">Repository: script, Samba configuration, reports</a> <span class="muted small">github.com/AGRO-Rachidi/linux-permissions-multiservice</span></li></ul></div></section>
   </div>
@@ -90,7 +99,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Rachidi Tchêgoun AGRO</p>
-      <p class="muted">Cybersecurity · Networks · Linux Systems</p>
+      <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
