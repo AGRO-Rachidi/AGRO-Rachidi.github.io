@@ -151,8 +151,19 @@ pre code { background: none; padding: 0; }
 .hero-portrait { margin: 0; justify-self: center; width: min(100%, 340px); padding: 8px; border: 1px solid var(--line-strong); border-radius: calc(var(--radius) + 6px); background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -16px rgba(0,0,0,.25); }
 .hero-portrait img { display: block; border-radius: var(--radius); aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 30%; width: 100%; background: var(--bg-band); }
 @media (max-width: 760px) {
-  .hero { grid-template-columns: 1fr; padding-top: 2rem; }
-  .hero-portrait { order: -1; justify-self: center; width: min(62vw, 240px); }
+  /* Mobile : nom d'abord, puis la photo, puis le paragraphe et les boutons */
+  .hero { display: flex; flex-direction: column; gap: 0; padding-top: 2rem; }
+  .hero-text { display: contents; }
+  .hero .eyebrow { order: 1; }
+  .hero-hello { order: 2; }
+  .hero-name { order: 3; }
+  .hero-headline { order: 4; }
+  .hero-portrait { order: 5; align-self: center; width: min(66vw, 250px); margin: .25rem 0 1.75rem; }
+  .hero-intro { order: 6; }
+  .hero .actions { order: 7; }
+  .hero-links { order: 8; justify-content: flex-start; }
+  .hero-text > :not(.actions):not(.hero-links) { align-self: stretch; text-align: left; }
+  .hero-text > .actions, .hero-links { align-self: flex-start; }
 }
 
 /* ---------- principles ---------- */
