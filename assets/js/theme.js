@@ -8,11 +8,8 @@
   var saved = read();
   if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
 
-  function current() {
-    var t = root.getAttribute('data-theme');
-    if (t) return t;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
+  // Sombre par défaut ; le choix « clair » est mémorisé.
+  function current() { return root.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
   document.addEventListener('DOMContentLoaded', function () {
     var btn = document.querySelector('.theme-toggle');
     if (!btn) return;

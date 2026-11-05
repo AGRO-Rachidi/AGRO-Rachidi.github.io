@@ -9,8 +9,7 @@
   <meta name="description" content="Pour chaque projet, j’explique d’où il vient, ce que j’ai fait, comment j’ai vérifié qu’il fonctionnait vraiment, et ce que j’améliorerais encore. Le code et les rapports sont liés à la fin.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Projets · Rachidi AGRO">
   <meta property="og:description" content="Pour chaque projet, j’explique d’où il vient, ce que j’ai fait, comment j’ai vérifié qu’il fonctionnait vraiment, et ce que j’améliorerais encore. Le code et les rapports sont liés à la fin.">
@@ -46,81 +45,134 @@
   <h1>Projets</h1>
   <p class="lead">Pour chaque projet, j’explique d’où il vient, ce que j’ai fait, comment j’ai vérifié qu’il fonctionnait vraiment, et ce que j’améliorerais encore. Le code et les rapports sont liés à la fin.</p>
 </section>
-<section class="wrap section-tight"><ol class="work-list">
-    <li class="work-item">
-      <a class="work-link" href="../../fr/projects/linux-server-hardening/">
-        <span class="work-num" aria-hidden="true">01</span>
-        <span class="work-body">
+<section class="wrap section-tight"><ul class="project-grid">
+    <li>
+      <a class="project-card" href="../../fr/projects/linux-server-hardening/">
+        <div class="thumb"><pre class="thumb-code is-term" aria-hidden="true"><code><span class="cmd"># sshd -T 2&gt;/dev/null | grep -E &quot;^(port|permitrootlogin|passwordauthentication|pubkeyauthentication) &quot;</span>
+port 2222
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no</code></pre></div>
+        <span class="card-body">
           <span class="work-meta">Sécurité Linux et systèmes · 25 – 31 août 2026 · 7 jours</span>
-          <span class="work-title">Sécuriser un serveur Linux en sept jours</span>
-          <span class="work-summary">Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.</span>
-          <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">OpenSSH</span><span class="tag">UFW</span><span class="tag">GPG (AES-256)</span></span>
+          <span class="card-title">Sécuriser un serveur Linux en sept jours</span>
+          <span class="card-summary">Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.</span>
+          <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">OpenSSH</span><span class="tag">UFW</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
-        <span class="work-cta" aria-hidden="true"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="visually-hidden">Lire l’étude de cas</span>
       </a>
-    </li><li class="work-item">
-      <a class="work-link" href="../../fr/projects/department-file-server/">
-        <span class="work-num" aria-hidden="true">02</span>
-        <span class="work-body">
+    </li><li>
+      <a class="project-card" href="../../fr/projects/department-file-server/">
+        <div class="thumb"><pre class="thumb-code is-term" aria-hidden="true"><code><span class="cmd"># bash techcorp_setup.sh</span>
+Le service rh existe deja
+Le dossier rh existe deja
+Permissions deja correctes
+Groupe deja correct
+Le service it existe deja
+Le dossier it existe deja
+Permissions deja correctes
+Groupe deja correct</code></pre></div>
+        <span class="card-body">
           <span class="work-meta">Administration Linux · contrôle d&#39;accès · Août 2026</span>
-          <span class="work-title">Un serveur de fichiers cloisonné par service, des groupes Unix à Samba</span>
-          <span class="work-summary">Quatre services, sept comptes d&#39;employés, et une règle simple : chaque équipe ne voit que ses propres fichiers. Je l&#39;ai construit avec des groupes Unix et des ACL, automatisé avec un script Bash qu&#39;on peut relancer sans risque, partagé sur le réseau avec Samba, et j&#39;ai testé chaque accès avec de vrais comptes d&#39;employés.</span>
-          <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">Bash</span><span class="tag">POSIX ACL (setfacl)</span><span class="tag">SGID / umask</span></span>
+          <span class="card-title">Un serveur de fichiers cloisonné par service, des groupes Unix à Samba</span>
+          <span class="card-summary">Quatre services, sept comptes d&#39;employés, et une règle simple : chaque équipe ne voit que ses propres fichiers. Je l&#39;ai construit avec des groupes Unix et des ACL, automatisé avec un script Bash qu&#39;on peut relancer sans risque, partagé sur le réseau avec Samba, et j&#39;ai testé chaque accès avec de vrais comptes d&#39;employés.</span>
+          <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">Bash</span><span class="tag">POSIX ACL (setfacl)</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
-        <span class="work-cta" aria-hidden="true"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="visually-hidden">Lire l’étude de cas</span>
       </a>
-    </li><li class="work-item">
-      <a class="work-link" href="../../fr/projects/enterprise-network-labs/">
-        <span class="work-num" aria-hidden="true">03</span>
-        <span class="work-body">
+    </li><li>
+      <a class="project-card" href="../../fr/projects/enterprise-network-labs/">
+        <div class="thumb"><img src="../../assets/img/projects/net-acl-validated.png" alt=""></div>
+        <span class="card-body">
           <span class="work-meta">Réseaux · sécurité réseau · Juillet – septembre 2026</span>
-          <span class="work-title">Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée</span>
-          <span class="work-summary">Six labos qui m&#39;ont mené de ma première VLAN à un réseau multi-sites complet : un plan d&#39;adressage construit à partir de vrais besoins, une politique de sécurité traduite en ACL, et des protections de niveau 2. Les captures sont mes propres fichiers de projet, avec les notes que j&#39;ai laissées quand chaque test passait.</span>
-          <span class="work-tags"><span class="tag">Cisco Packet Tracer 8</span><span class="tag">Cisco IOS 15</span><span class="tag">VLAN / 802.1Q</span><span class="tag">Static · RIPv2 · OSPF</span><span class="tag">VLSM</span></span>
+          <span class="card-title">Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée</span>
+          <span class="card-summary">Six labos qui m&#39;ont mené de ma première VLAN à un réseau multi-sites complet : un plan d&#39;adressage construit à partir de vrais besoins, une politique de sécurité traduite en ACL, et des protections de niveau 2. Les captures sont mes propres fichiers de projet, avec les notes que j&#39;ai laissées quand chaque test passait.</span>
+          <span class="work-tags"><span class="tag">Cisco Packet Tracer 8</span><span class="tag">Cisco IOS 15</span><span class="tag">VLAN / 802.1Q</span><span class="tag">Static · RIPv2 · OSPF</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
-        <span class="work-cta" aria-hidden="true"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="visually-hidden">Lire l’étude de cas</span>
       </a>
-    </li><li class="work-item">
-      <a class="work-link" href="../../fr/projects/rust-port-scanner/">
-        <span class="work-num" aria-hidden="true">04</span>
-        <span class="work-body">
+    </li><li>
+      <a class="project-card" href="../../fr/projects/rust-port-scanner/">
+        <div class="thumb"><pre class="thumb-code " aria-hidden="true"><code>// Le semaphore limite le nombre de taches qui peuvent tourner EN MEME
+// TEMPS. Sans ca, on lancerait 65535 connexions d&#39;un coup, ce qui
+// risquerait de saturer le systeme ou le reseau. Ici, 5000 taches
+// max en parallele, les autres attendent qu&#39;une place se libere.
+let semaphore = Arc::new(Semaphore::new(5000));
+
+// Contrairement aux threads (version 2), on ne cree pas de &quot;gros&quot;
+// threads du systeme ici : chaque port devient une petite tache
+// asynchrone, beaucoup plus legere en memoire.
+for port in port_debut..=port_fin {
+    let ip_cible_clone = ip_cible.clone();
+    let tx_clone = tx.clone();
+    let duree_clone = connexion_time.clone();</code></pre></div>
+        <span class="card-body">
           <span class="work-meta">Programmation système · concurrence · Été 2026 · trois semaines</span>
-          <span class="work-title">Un scanner de ports TCP en Rust, réécrit trois fois</span>
-          <span class="work-summary">Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.</span>
-          <span class="work-tags"><span class="tag">Rust</span><span class="tag">std::thread</span><span class="tag">mpsc channels</span><span class="tag">Tokio (async/await)</span><span class="tag">Semaphore</span></span>
+          <span class="card-title">Un scanner de ports TCP en Rust, réécrit trois fois</span>
+          <span class="card-summary">Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.</span>
+          <span class="work-tags"><span class="tag">Rust</span><span class="tag">std::thread</span><span class="tag">mpsc channels</span><span class="tag">Tokio (async/await)</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
-        <span class="work-cta" aria-hidden="true"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="visually-hidden">Lire l’étude de cas</span>
       </a>
-    </li><li class="work-item">
-      <a class="work-link" href="../../fr/projects/cassandra-vs-postgresql/">
-        <span class="work-num" aria-hidden="true">05</span>
-        <span class="work-body">
+    </li><li>
+      <a class="project-card" href="../../fr/projects/cassandra-vs-postgresql/">
+        <div class="thumb"><img src="../../assets/img/projects/cassandra-quorum.png" alt=""></div>
+        <span class="card-body">
           <span class="work-meta">Bases de données · systèmes distribués · Octobre – novembre 2026</span>
-          <span class="work-title">Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données</span>
-          <span class="work-summary">Avec deux camarades, j&#39;ai exploré la façon dont Cassandra gère de gros volumes de données : nous avons conçu le schéma à partir de nos requêtes, fait tourner un cluster de 3 nœuds qui répondait encore avec un nœud arrêté, et comparé Cassandra à PostgreSQL sur dix ans de mesures de capteurs simulées.</span>
-          <span class="work-tags"><span class="tag">Apache Cassandra 5.0</span><span class="tag">CQL</span><span class="tag">PostgreSQL 15</span><span class="tag">Docker</span><span class="tag">Python</span></span>
+          <span class="card-title">Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données</span>
+          <span class="card-summary">Avec deux camarades, j&#39;ai exploré la façon dont Cassandra gère de gros volumes de données : nous avons conçu le schéma à partir de nos requêtes, fait tourner un cluster de 3 nœuds qui répondait encore avec un nœud arrêté, et comparé Cassandra à PostgreSQL sur dix ans de mesures de capteurs simulées.</span>
+          <span class="work-tags"><span class="tag">Apache Cassandra 5.0</span><span class="tag">CQL</span><span class="tag">PostgreSQL 15</span><span class="tag">Docker</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
-        <span class="work-cta" aria-hidden="true"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="visually-hidden">Lire l’étude de cas</span>
+      </a>
+    </li><li>
+      <a class="project-card" href="../../fr/projects/python-for-security/">
+        <div class="thumb"><pre class="thumb-code " aria-hidden="true"><code>def classify(text):
+    try:
+        # Python transforme le texte en adresse IP pour pouvoir la tester.
+        ip = ipaddress.ip_address(text)
+    except ValueError:
+        # Si ce n&#39;est pas une adresse correcte, on renvoie &quot;invalid&quot;.
+        return &quot;invalid&quot;
+
+    # On regarde les catégories l&#39;une après l&#39;autre.
+    if ip.is_loopback:
+        return &quot;loopback&quot;
+    if ip.is_private:
+        return &quot;private&quot;
+    if ip.is_multicast or ip.is_reserved:
+        return &quot;other&quot;
+    if ip.is_global:
+        return &quot;public&quot;</code></pre></div>
+        <span class="card-body">
+          <span class="work-meta">Scripts · analyse de journaux · Depuis octobre 2026</span>
+          <span class="card-title">Python pour la sécurité : un journal d&#39;apprentissage</span>
+          <span class="card-summary">Apprendre Python avec des exemples de sécurité plutôt qu&#39;un « hello world » : un script qui extrait les adresses IPv4 d&#39;un journal, les classe avec le module ipaddress et produit des rapports TXT, JSON et CSV, plus un petit scanner TCP limité à localhost.</span>
+          <span class="work-tags"><span class="tag">Python 3</span><span class="tag">re</span><span class="tag">ipaddress</span><span class="tag">json · csv</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </span>
+      </a>
+    </li><li>
+      <a class="project-card" href="../../fr/projects/fortran-mpi/">
+        <div class="thumb"><pre class="thumb-code " aria-hidden="true"><code>! Distribution initiale : un systeme par esclave, pilule pour les esclaves en trop
+do e = 1, nproc - 1
+   if (prochain &lt;= NSYS) then
+      call MPI_Send(prochain, 1, MPI_INTEGER, e, TAG_TRAVAIL, MPI_COMM_WORLD)
+      tache_de(e) = prochain
+      prochain = prochain + 1
+   else
+      call MPI_Send(pilule, 1, MPI_INTEGER, e, TAG_STOP, MPI_COMM_WORLD)
+   end if</code></pre></div>
+        <span class="card-body">
+          <span class="work-meta">HPC · calcul parallèle · Septembre – octobre 2026</span>
+          <span class="card-title">Programmation parallèle en Fortran avec MPI</span>
+          <span class="card-summary">Du premier MPI_Send à l&#39;équilibrage dynamique de charge : échanges point à point, Scatter/Gather sur des matrices, et un schéma maître–esclaves qui confie 150 problèmes résolus par la méthode de Newton au premier processus libre.</span>
+          <span class="work-tags"><span class="tag">Fortran 2008</span><span class="tag">MPI (mpi_f08)</span><span class="tag">Open MPI</span><span class="tag">LAPACK</span></span>
+          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </span>
       </a>
     </li>
-  </ol></section>
-<section class="wrap section" aria-labelledby="more-title">
-  <h2 id="more-title" class="h3">Également en cours</h2>
-  <div class="cards"><article class="card">
-    <p class="work-meta">Scripts · analyse de journaux · En cours · dépôt d&#39;apprentissage public</p>
-    <h3><a href="../../fr/projects/python-for-security/">Python pour la sécurité : un journal d&#39;apprentissage</a></h3>
-    <p>Apprendre Python avec des exemples de sécurité plutôt qu&#39;un « hello world » : un script qui extrait les adresses IPv4 d&#39;un journal, les classe avec le module ipaddress et produit des rapports TXT, JSON et CSV, plus un petit scanner TCP limité à localhost.</p>
-  </article><article class="card">
-    <p class="work-meta">HPC · calcul parallèle · Travaux de cours · programmation avancée</p>
-    <h3><a href="../../fr/projects/fortran-mpi/">Programmation parallèle en Fortran avec MPI</a></h3>
-    <p>Du premier MPI_Send à l&#39;équilibrage dynamique de charge : échanges point à point, Scatter/Gather sur des matrices, et un schéma maître–esclaves qui confie 150 problèmes résolus par la méthode de Newton au premier processus libre.</p>
-  </article></div>
-</section>
+  </ul></section>
 </main>
 <footer class="site-footer">
   <div class="wrap footer-inner">
