@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Securing a Linux server in seven days · Rachidi AGRO</title>
+  <meta name="description" content="Took over a simulated accounting server with production requirements: key-only SSH, default-deny firewall, encrypted backups proven by a real restore, self-healing web service, and an incident investigation.">
+  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Securing a Linux server in seven days · Rachidi AGRO">
+  <meta property="og:description" content="Took over a simulated accounting server with production requirements: key-only SSH, default-deny firewall, encrypted backups proven by a real restore, self-healing web service, and an incident investigation.">
+  <meta property="og:locale" content="en_US">
+  <link rel="canonical" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/projects/linux-server-hardening/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <script src="../../assets/js/theme.js"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../" aria-label="Home"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <ul><li><a href="../../projects/" aria-current="page">Projects</a></li><li><a href="../../skills/">Skills</a></li><li><a href="../../background/">Background</a></li><li><a href="../../about/">About</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../fr/projects/linux-server-hardening/" hreflang="fr" lang="fr" title="Version française">FR</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light/dark theme" title="Switch light/dark theme"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
+    <p class="eyebrow">Linux &amp; systems security</p>
+    <h1>Securing a Linux server in seven days</h1>
+    <p class="lead">Took over a simulated accounting server with production requirements: key-only SSH, default-deny firewall, encrypted backups proven by a real restore, self-healing web service, and an incident investigation.</p>
+    <dl class="facts">
+      <div><dt>Period</dt><dd>Aug 25 – 31, 2026 · 7 days</dd></div>
+      <div><dt>Status</dt><dd>Completed · internship lab</dd></div>
+      <div><dt>Type</dt><dd>Internship project</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Ubuntu 24.04</li><li class="tag">Docker</li><li class="tag">OpenSSH</li><li class="tag">UFW</li><li class="tag">GPG (AES-256)</li><li class="tag">Bash</li><li class="tag">cron</li><li class="tag">supervisord</li><li class="tag">Nginx</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: scripts and mission report</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Mission « Excellence Cyber », run during the systems-administration part of my internship at FusionSoft Labs. I played a junior sysadmin taking over the server of a fictional company&#39;s accounting department, with a written specification: recovery point objective (RPO) of 24 hours and recovery time objective (RTO) of 30 minutes.</p></div></section>
+    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>A freshly installed server with no protection. Every requirement (access, data separation, backups, availability, traceability) had to be met and demonstrated, not just configured.</p></div></section>
+    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Bring the server to the specification in seven days, prove each control with a test, and close the week with an honest self-audit.</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Ubuntu 24.04 server in a Docker container, on its own isolated Docker network with a fixed address.</li><li>Three named accounts: two administrators with sudo, one service account with no interactive shell. Each has its own ed25519 key pair protected by a passphrase.</li><li>SSH on a non-default port, root login and password authentication disabled; UFW denies all incoming traffic except SSH from the administration subnet.</li><li>A nightly job compresses the accounting data, encrypts it with GPG (AES-256), deletes the clear archive and keeps seven days of history.</li><li>Nginx supervised by supervisord; connection history available through last and lastlog.</li></ul></div></section>
+    
+    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Day 1: isolated network, named accounts, key-only SSH and firewall. Public keys were copied in with docker cp, because password authentication was never enabled, not even temporarily.</li><li>Days 2–3: dedicated accounting folder with the SGID bit; encrypted backup script with seven-day rotation, then a full restore test.</li><li>Days 4–5: automatic restart of the web service, and connection traceability.</li><li>Day 6: an unannounced incident (a customer claims to have received an invoice they never ordered), investigated without knowing the answer.</li><li>Day 7: self-audit of every requirement and a mission report.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficulties and how I solved them</h2><div class="case-body"><ul><li>UFW would not start: a standard container lacks the kernel capabilities it needs. I froze the work with docker commit and recreated the container with NET_ADMIN and NET_RAW, without losing anything.</li><li>No systemd or journald inside the container, so the usual tools for automatic restart and logs were missing. I used supervisord for the service and last/lastlog for connection history, which work without systemd.</li></ul></div></section>
+    <section class="case-section" id="verification" aria-labelledby="verification-h">
+  <h2 id="verification-h">Verification log</h2>
+  <div class="case-body">
+    <p class="muted small">Each claim, the test used to check it, and what was observed.</p>
+    <div class="table-scroll" role="region" aria-label="Verification log" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">Claim</th><th scope="col">How it was tested</th><th scope="col">Observed result</th></tr></thead>
+      <tbody><tr><th scope="row">Root cannot log in over SSH</th><td>Attempted a root login</td><td><span class="ok-dot" aria-hidden="true"></span>Refused</td></tr><tr><th scope="row">Keys only, no passwords</th><td>Key login, then password login</td><td><span class="ok-dot" aria-hidden="true"></span>Key accepted · password refused</td></tr><tr><th scope="row">Backups can be restored within the RTO</th><td>Moved the real folder away (total loss), restored the latest encrypted archive, compared file by file with diff</td><td><span class="ok-dot" aria-hidden="true"></span>No difference · a few minutes, well under 30 min</td></tr><tr><th scope="row">The web service heals itself</th><td>kill -9 on the Nginx process</td><td><span class="ok-dot" aria-hidden="true"></span>Restarted automatically in under one second</td></tr><tr><th scope="row">The suspicious invoice did not come from the server</th><td>Reviewed admin logins, scheduled tasks, Nginx logs and the accounting folder</td><td><span class="ok-dot" aria-hidden="true"></span>No sign of compromise; the server has no invoicing feature. Likely phishing aimed at the customer</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+</section>
+    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>All seven controls of the final audit met: SSH root blocked, key-only authentication, default-deny firewall, encryption at rest with seven-day rotation, restore tested and timed, automatic restart, consultable connection history.</li><li>A lesson I kept: finding nothing abnormal in an investigation is a result. It points to another explanation.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Known limits</h2><div class="case-body"><ul><li>A simulated server in a container, not a production machine with real users.</li><li>The backup passphrase is stored on the server itself. In production it should live in an external secrets manager.</li><li>The scripts in the repository were rebuilt after the container was deleted. They reproduce the commands documented in the original report, and the repository says so.</li></ul></div></section>
+    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Move the backup secret to a dedicated secrets manager</li><li>Forward logs to a central collector or SIEM instead of reading them on the host</li><li>Automate the final audit as a repeatable compliance check</li></ul></div></section>
+    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer">Repository: scripts and mission report</a> <span class="muted small">github.com/AGRO-Rachidi/linux-sysadmin-hardening</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="More projects">
+    <span></span>
+    <a class="pager-next" href="../../projects/department-file-server/"><span class="muted small">Next <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>A department-isolated file server, from Unix groups to Samba</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="muted">Cybersecurity · Networks · Linux Systems</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+  </div>
+</footer>
+</body>
+</html>

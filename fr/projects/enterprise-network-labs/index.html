@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée · Rachidi AGRO</title>
+  <meta name="description" content="Six labos progressifs, d&#39;une segmentation en cinq VLAN à un siège de huit segments relié à deux agences par WAN. Adressage justifié par VLSM, politique traduite en ACL étendues, protections de niveau 2 (port security, DHCP snooping, inspection ARP dynamique).">
+  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée · Rachidi AGRO">
+  <meta property="og:description" content="Six labos progressifs, d&#39;une segmentation en cinq VLAN à un siège de huit segments relié à deux agences par WAN. Adressage justifié par VLSM, politique traduite en ACL étendues, protections de niveau 2 (port security, DHCP snooping, inspection ARP dynamique).">
+  <meta property="og:locale" content="fr_FR">
+  <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/enterprise-network-labs/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/enterprise-network-labs/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/enterprise-network-labs/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/enterprise-network-labs/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <script src="../../../assets/js/theme.js"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../../fr/" aria-label="Accueil"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <ul><li><a href="../../../fr/projects/" aria-current="page">Projets</a></li><li><a href="../../../fr/skills/">Compétences</a></li><li><a href="../../../fr/background/">Parcours</a></li><li><a href="../../../fr/about/">À propos</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../../projects/enterprise-network-labs/" hreflang="en" lang="en" title="English version">EN</a>
+      <button class="theme-toggle" type="button" aria-label="Basculer thème clair/sombre" title="Basculer thème clair/sombre"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
+    <p class="eyebrow">Réseaux · sécurité réseau</p>
+    <h1>Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée</h1>
+    <p class="lead">Six labos progressifs, d&#39;une segmentation en cinq VLAN à un siège de huit segments relié à deux agences par WAN. Adressage justifié par VLSM, politique traduite en ACL étendues, protections de niveau 2 (port security, DHCP snooping, inspection ARP dynamique).</p>
+    <dl class="facts">
+      <div><dt>Période</dt><dd>Juillet – septembre 2026</dd></div>
+      <div><dt>Statut</dt><dd>Terminé · simulé sous Cisco Packet Tracer</dd></div>
+      <div><dt>Type</dt><dd>Projet de stage</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Cisco Packet Tracer 8</li><li class="tag">Cisco IOS 15</li><li class="tag">VLAN / 802.1Q</li><li class="tag">Static · RIPv2 · OSPF</li><li class="tag">VLSM</li><li class="tag">Extended ACL</li><li class="tag">DHCP snooping · DAI</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/cisco-networking-labs" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt : configurations des six labos</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Volet réseau de mon stage chez FusionSoft Labs, encadré par un ingénieur réseau. Les labos suivent l&#39;ordre d&#39;un ingénieur : interconnecter, segmenter, router, filtrer, puis concevoir un site entier à partir de besoins métier.</p></div></section>
+    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Concevoir un réseau d&#39;entreprise qui sépare les services, route volontairement entre eux, filtre ce que chacun peut atteindre, et peut grandir sans être entièrement redécoupé.</p></div></section>
+    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Comprendre chaque mécanisme en le construisant, le valider par des tests de connectivité, et justifier chaque choix de conception (taille de sous-réseau, protocole de routage, placement des filtres).</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Labos 1–2 : cinq VLAN (RH, Comptabilité, Informatique, Direction, VLAN de management 99) routés en Router-on-a-Stick sur un trunk 802.1Q ; puis une ACL étendue interdisant au VLAN Commercial de joindre Admin, et la port security limitant chaque port d&#39;accès à une adresse MAC.</li><li>Labo 3 : quatre sites distants en boucle série, routés successivement en statique, en RIPv2 et en OSPF zone unique.</li><li>Labo 4 : découpage VLSM de 172.25.0.0/16 entre trois VLAN de tailles différentes, routage inter-VLAN sur commutateur multicouche (SVI) et DHCP.</li><li>Labo 5 : un /24 redécoupé par VLSM, trois serveurs applicatifs, une politique de sécurité traduite en ACL étendues appliquées au plus près de la source, ports inutilisés désactivés, DHCP snooping et inspection ARP dynamique.</li><li>Labo 6 : un siège de huit segments (voix, invités, IT/SOC, comptabilité, caméras, serveurs, RH, direction), un commutateur cœur multicouche avec relais DHCP, des trunks limités aux VLAN nécessaires, un VLAN voix sur des ports partagés, et deux agences reliées par liaisons WAN série en OSPF.</li></ul></div></section>
+    <div class="case-figures"><figure class="case-figure">
+    <img src="../../../assets/img/projects/lab5-vlsm-policy.png" width="1346" height="415" alt="Topologie Packet Tracer du labo 5 : quatre LAN adressés en VLSM, une liaison /30 entre routeurs et trois serveurs (DNS-web, fichiers, journaux)" loading="lazy">
+    <figcaption>Labo 5 : le plan VLSM refait, avec le segment serveurs que protège la politique d&#39;ACL.</figcaption>
+  </figure><figure class="case-figure">
+    <img src="../../../assets/img/projects/lab6-multisite.png" width="1362" height="210" alt="Vue d&#39;ensemble Packet Tracer du labo 6 : pare-feu, routeur et commutateur cœur desservant huit segments colorés" loading="lazy">
+    <figcaption>Labo 6 : le siège, huit segments derrière le commutateur cœur.</figcaption>
+  </figure></div>
+    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Configuration de chaque équipement en ligne de commande IOS, avec conservation des configurations.</li><li>Dimensionnement du labo 6 à partir du nombre d&#39;équipements estimé : 196 appareils plus environ 50 % de croissance, soit près de 368 adresses. Un /24 (254 utiles) était trop petit, un /23 (510) ne laissait pas de vraie marge, un /22 (1 022) convenait avec de la réserve.</li><li>Rédaction de la politique du labo 5 sous forme d&#39;une ACL par source, par exemple : le VLAN Users ne peut joindre le serveur DNS/web que sur TCP 80, TCP 443 et UDP 53.</li><li>En parallèle des six labos : un labo de services avec cinq serveurs dédiés (DHCP, DNS, web, FTP, messagerie), chacun configuré et testé depuis les postes clients, avec une partie dépannage par service.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficultés et solutions</h2><div class="case-body"><ul><li>Mon premier plan du labo 5 découpait le /24 en quatre blocs /26 égaux. Quand il a fallu ajouter deux services sans interrompre le réseau, il ne tenait plus. J&#39;ai refait le plan en VLSM : deux VLAN utilisateurs en /27, un /26 pour les serveurs, un /27 pour l&#39;IT et un /30 pour la liaison entre routeurs.</li><li>Bien distinguer niveau 2 et niveau 3 : une ACL filtre sur les adresses IP, la port security sur les adresses MAC. Elles répondent à des menaces différentes et ne se remplacent pas.</li></ul></div></section>
+    <section class="case-section" id="verification" aria-labelledby="verification-h">
+  <h2 id="verification-h">Journal de vérification</h2>
+  <div class="case-body">
+    <p class="muted small">Chaque affirmation, le test utilisé pour la vérifier et ce qui a été observé.</p>
+    <div class="table-scroll" role="region" aria-label="Journal de vérification" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">Affirmation</th><th scope="col">Comment c’est testé</th><th scope="col">Résultat observé</th></tr></thead>
+      <tbody><tr><th scope="row">Commercial ne joint pas Admin ; une MAC par port</th><td>Tests de connectivité dans le fichier du labo</td><td><span class="ok-dot" aria-hidden="true"></span>Annotation laissée au moment du test : « Tout est OK ! Commercial ne peut pas communiquer avec admin »</td></tr><tr><th scope="row">Quatre sites joignables avec chaque méthode de routage</th><td>Tests inter-sites après le statique, puis RIPv2, puis OSPF</td><td><span class="ok-dot" aria-hidden="true"></span>Les trois validés successivement (annoté dans le fichier du projet)</td></tr><tr><th scope="row">L&#39;architecture multi-sites fonctionne de bout en bout</th><td>Tests entre segments et siège → agences ; VLAN voix sur un port partagé</td><td><span class="ok-dot" aria-hidden="true"></span>Les huit segments communiquent via le cœur ; les deux agences sont joignables ; VLAN voix opérationnel</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+</section>
+    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Six topologies fonctionnelles avec leurs configurations, et un plan d&#39;adressage où chaque taille de sous-réseau est argumentée.</li><li>Une compréhension concrète des compromis de routage : le statique s&#39;alourdit vite quand les réseaux se multiplient, RIP est simple mais limité, OSPF est le plus proche d&#39;un réseau d&#39;entreprise réel.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites connues</h2><div class="case-body"><ul><li>Simulation uniquement (Packet Tracer), sans équipement physique.</li><li>Les sorties brutes des commandes de vérification n&#39;ont pas été conservées à l&#39;époque. Les résultats viennent des annotations des fichiers de projet et des captures des topologies actives, comme le précise le dépôt.</li><li>Toutes les adresses sont des plages privées de simulation, sans lien avec une infrastructure réelle.</li></ul></div></section>
+    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Conserver les sorties des commandes show comme preuves pour chaque prochain labo</li><li>Ajouter IPv6 et une journalisation centralisée (syslog) à l&#39;architecture multi-sites</li><li>En reconstruire une partie sur IOS réel ou émulé</li></ul></div></section>
+    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/cisco-networking-labs" rel="noopener noreferrer">Dépôt : configurations des six labos</a> <span class="muted small">github.com/AGRO-Rachidi/cisco-networking-labs</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="Autres projets">
+    <a class="pager-prev" href="../../../fr/projects/department-file-server/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Précédent</span><span>Un serveur de fichiers cloisonné par service, des groupes Unix à Samba</span></a>
+    <a class="pager-next" href="../../../fr/projects/rust-port-scanner/"><span class="muted small">Suivant <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Un scanner de ports TCP en Rust, réécrit trois fois</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+  </div>
+</footer>
+</body>
+</html>

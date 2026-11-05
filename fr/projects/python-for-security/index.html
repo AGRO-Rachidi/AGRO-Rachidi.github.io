@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Python pour la sécurité : un journal d&#39;apprentissage · Rachidi AGRO</title>
+  <meta name="description" content="Apprendre Python avec des exemples de sécurité plutôt qu&#39;un « hello world » : un script qui extrait les adresses IPv4 d&#39;un journal, les classe avec le module ipaddress et produit des rapports TXT, JSON et CSV, plus un petit scanner TCP limité à localhost.">
+  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Python pour la sécurité : un journal d&#39;apprentissage · Rachidi AGRO">
+  <meta property="og:description" content="Apprendre Python avec des exemples de sécurité plutôt qu&#39;un « hello world » : un script qui extrait les adresses IPv4 d&#39;un journal, les classe avec le module ipaddress et produit des rapports TXT, JSON et CSV, plus un petit scanner TCP limité à localhost.">
+  <meta property="og:locale" content="fr_FR">
+  <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/python-for-security/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/python-for-security/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/python-for-security/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/python-for-security/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <script src="../../../assets/js/theme.js"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../../fr/" aria-label="Accueil"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <ul><li><a href="../../../fr/projects/" aria-current="page">Projets</a></li><li><a href="../../../fr/skills/">Compétences</a></li><li><a href="../../../fr/background/">Parcours</a></li><li><a href="../../../fr/about/">À propos</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../../projects/python-for-security/" hreflang="en" lang="en" title="English version">EN</a>
+      <button class="theme-toggle" type="button" aria-label="Basculer thème clair/sombre" title="Basculer thème clair/sombre"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
+    <p class="eyebrow">Scripts · analyse de journaux</p>
+    <h1>Python pour la sécurité : un journal d&#39;apprentissage</h1>
+    <p class="lead">Apprendre Python avec des exemples de sécurité plutôt qu&#39;un « hello world » : un script qui extrait les adresses IPv4 d&#39;un journal, les classe avec le module ipaddress et produit des rapports TXT, JSON et CSV, plus un petit scanner TCP limité à localhost.</p>
+    <dl class="facts">
+      <div><dt>Période</dt><dd>Depuis octobre 2026</dd></div>
+      <div><dt>Statut</dt><dd>En cours · dépôt d&#39;apprentissage public</dd></div>
+      <div><dt>Type</dt><dd>Projet personnel</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Python 3</li><li class="tag">re</li><li class="tag">ipaddress</li><li class="tag">json · csv</li><li class="tag">socket</li><li class="tag">Jupyter</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/cybersecurity-python-journey" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Presque toutes les offres SOC demandent un peu de scripting. Je publie tout dans un dépôt public, erreurs comprises, pour que la progression reste visible.</p></div></section>
+    
+    
+    
+    
+    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Semaine 1 : bases appliquées aux ports, aux IP et à de faux journaux de connexion, avec pour finir un comptage des échecs de connexion par IP.</li><li>Semaine 2 : de vrais outils en ligne de commande : sys.argv, fonctions et main(), classification des IP (privées, loopback…), rapports en trois formats, gestion des fichiers manquants.</li></ul></div></section>
+    
+    
+    
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites connues</h2><div class="case-body"><ul><li>Exercices d&#39;apprentissage sur des journaux fictifs, pas un outil de production.</li></ul></div></section>
+    
+    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/cybersecurity-python-journey" rel="noopener noreferrer">Dépôt</a> <span class="muted small">github.com/AGRO-Rachidi/cybersecurity-python-journey</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="Autres projets">
+    <a class="pager-prev" href="../../../fr/projects/rust-port-scanner/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Précédent</span><span>Un scanner de ports TCP en Rust, réécrit trois fois</span></a>
+    <a class="pager-next" href="../../../fr/projects/cassandra-vs-postgresql/"><span class="muted small">Suivant <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+  </div>
+</footer>
+</body>
+</html>

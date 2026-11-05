@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>A department-isolated file server, from Unix groups to Samba · Rachidi AGRO</title>
+  <meta name="description" content="Four departments, eleven employees, one rule: each team sees only its own files. Built with groups, SGID and POSIX ACLs, automated with an idempotent Bash script, shared over the network with Samba, and tested from a real SMB client.">
+  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A department-isolated file server, from Unix groups to Samba · Rachidi AGRO">
+  <meta property="og:description" content="Four departments, eleven employees, one rule: each team sees only its own files. Built with groups, SGID and POSIX ACLs, automated with an idempotent Bash script, shared over the network with Samba, and tested from a real SMB client.">
+  <meta property="og:locale" content="en_US">
+  <link rel="canonical" href="https://agro-rachidi.github.io/projects/department-file-server/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/department-file-server/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/department-file-server/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/projects/department-file-server/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <script src="../../assets/js/theme.js"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../" aria-label="Home"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <ul><li><a href="../../projects/" aria-current="page">Projects</a></li><li><a href="../../skills/">Skills</a></li><li><a href="../../background/">Background</a></li><li><a href="../../about/">About</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../fr/projects/department-file-server/" hreflang="fr" lang="fr" title="Version française">FR</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light/dark theme" title="Switch light/dark theme"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
+    <p class="eyebrow">Linux administration · access control</p>
+    <h1>A department-isolated file server, from Unix groups to Samba</h1>
+    <p class="lead">Four departments, eleven employees, one rule: each team sees only its own files. Built with groups, SGID and POSIX ACLs, automated with an idempotent Bash script, shared over the network with Samba, and tested from a real SMB client.</p>
+    <dl class="facts">
+      <div><dt>Period</dt><dd>August 2026</dd></div>
+      <div><dt>Status</dt><dd>Completed · internship lab</dd></div>
+      <div><dt>Type</dt><dd>Internship project</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Ubuntu 24.04</li><li class="tag">Docker</li><li class="tag">Bash</li><li class="tag">POSIX ACL (setfacl)</li><li class="tag">SGID / umask</li><li class="tag">Samba 4</li><li class="tag">smbclient</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-permissions-multiservice" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: script, Samba configuration, reports</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Second project of the systems part of my internship at FusionSoft Labs: a file server for « TechCorp », a fictional company with HR, IT, Finance and Management, eleven employees in total, built in an isolated container lab.</p></div></section>
+    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>Each department must reach its own documents and a common space, and nothing else. The setup also had to be reproducible: typing the same seven commands per department by hand had already produced real mistakes.</p></div></section>
+    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Least privilege on disk, the same guarantees over the network, and a setup script that can be run again safely.</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Unix group and one folder per department, mode 770 with the SGID bit, plus a common folder reached through a shared secondary group.</li><li>POSIX ACLs on the parent folder grant each department the traverse right (x) only.</li><li>An idempotent Bash script with three functions (create service, create users, set up folders) that checks the current state before acting.</li><li>Samba shares under /srv (per the Filesystem Hierarchy Standard), one per group: valid users = @group, create mask 0660, configuration validated with testparm.</li></ul></div></section>
+    
+    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Built the model by hand first, then replaced the repetition with a script. Employee entries are stored as user:group and split with Bash parameter expansion, without calling external commands.</li><li>Fixed real scripting bugs along the way: a test that executed a variable instead of evaluating it; useradd failing silently while the script printed « created » (fixed by checking the exit code); comparing a name against the whole getent line instead of its first field.</li><li>Opened the setup to the network with Samba: a system account and a separate Samba account per employee, created in a loop.</li><li>Tested everything with each employee&#39;s real account, never as root.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficulties and how I solved them</h2><div class="case-body"><ul><li>A correctly configured user was still denied access to their own folder. The cause was the parent folder: reaching a file requires the traverse right on every directory of the path. A folder has only one owning group, and « chmod o+x » would have opened traversal to every account on the system, which breaks least privilege. POSIX ACLs (setfacl -m g:&lt;group&gt;:x) solved it without changing the owner.</li><li>SGID guarantees the group of a new file, not that the group can write to it. With the default umask 0022, new files were -rw-r--r--. A working team folder needs both settings, and umask persistence needs a profile file or default ACLs.</li></ul></div></section>
+    <section class="case-section" id="verification" aria-labelledby="verification-h">
+  <h2 id="verification-h">Verification log</h2>
+  <div class="case-body">
+    <p class="muted small">Each claim, the test used to check it, and what was observed.</p>
+    <div class="table-scroll" role="region" aria-label="Verification log" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">Claim</th><th scope="col">How it was tested</th><th scope="col">Observed result</th></tr></thead>
+      <tbody><tr><th scope="row">The script is idempotent</th><td>Ran it, then ran it again unchanged</td><td><span class="ok-dot" aria-hidden="true"></span>Second run only reports « already exists », with no error or duplicate</td></tr><tr><th scope="row">Departments are isolated on disk</th><td>ls and cd tested separately into another department&#39;s folder, with a real employee account</td><td><span class="ok-dot" aria-hidden="true"></span>Denied across departments · allowed within a department and on the common folder</td></tr><tr><th scope="row">The isolation still holds over the network</th><td>smbclient as an HR employee: own share, then another department&#39;s share</td><td><span class="ok-dot" aria-hidden="true"></span>Write confirmed on HR · NT_STATUS_ACCESS_DENIED elsewhere</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+</section>
+    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>A file server where every allowed access works and every forbidden access fails exactly where it should, locally and over SMB.</li><li>A reusable, idempotent provisioning script, and a written explanation of each permission choice.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Known limits</h2><div class="case-body"><ul><li>A lab in a container with fictional accounts, not a company directory.</li><li>Identities are local; there is no central directory (LDAP or Active Directory).</li><li>In the repository, the Samba part is a compilation of commands that were run and validated one by one, not an original script. The README says so.</li></ul></div></section>
+    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Default ACLs so group write no longer depends on each user&#39;s umask</li><li>Central identities with Samba AD or LDAP</li><li>Audit logging of share access</li></ul></div></section>
+    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-permissions-multiservice" rel="noopener noreferrer">Repository: script, Samba configuration, reports</a> <span class="muted small">github.com/AGRO-Rachidi/linux-permissions-multiservice</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="More projects">
+    <a class="pager-prev" href="../../projects/linux-server-hardening/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous</span><span>Securing a Linux server in seven days</span></a>
+    <a class="pager-next" href="../../projects/enterprise-network-labs/"><span class="muted small">Next <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Enterprise network labs: from VLANs to a secured multi-site design</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="muted">Cybersecurity · Networks · Linux Systems</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Sécuriser un serveur Linux en sept jours · Rachidi AGRO</title>
+  <meta name="description" content="Prise en main d&#39;un serveur comptable simulé avec des exigences de production : SSH par clés uniquement, pare-feu en refus par défaut, sauvegardes chiffrées prouvées par une vraie restauration, service web qui redémarre seul et investigation d&#39;incident.">
+  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sécuriser un serveur Linux en sept jours · Rachidi AGRO">
+  <meta property="og:description" content="Prise en main d&#39;un serveur comptable simulé avec des exigences de production : SSH par clés uniquement, pare-feu en refus par défaut, sauvegardes chiffrées prouvées par une vraie restauration, service web qui redémarre seul et investigation d&#39;incident.">
+  <meta property="og:locale" content="fr_FR">
+  <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../../assets/css/site.css">
+  <script src="../../../assets/js/theme.js"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../../fr/" aria-label="Accueil"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <ul><li><a href="../../../fr/projects/" aria-current="page">Projets</a></li><li><a href="../../../fr/skills/">Compétences</a></li><li><a href="../../../fr/background/">Parcours</a></li><li><a href="../../../fr/about/">À propos</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../../projects/linux-server-hardening/" hreflang="en" lang="en" title="English version">EN</a>
+      <button class="theme-toggle" type="button" aria-label="Basculer thème clair/sombre" title="Basculer thème clair/sombre"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
+    <p class="eyebrow">Sécurité Linux et systèmes</p>
+    <h1>Sécuriser un serveur Linux en sept jours</h1>
+    <p class="lead">Prise en main d&#39;un serveur comptable simulé avec des exigences de production : SSH par clés uniquement, pare-feu en refus par défaut, sauvegardes chiffrées prouvées par une vraie restauration, service web qui redémarre seul et investigation d&#39;incident.</p>
+    <dl class="facts">
+      <div><dt>Période</dt><dd>25 – 31 août 2026 · 7 jours</dd></div>
+      <div><dt>Statut</dt><dd>Terminé · laboratoire de stage</dd></div>
+      <div><dt>Type</dt><dd>Projet de stage</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Ubuntu 24.04</li><li class="tag">Docker</li><li class="tag">OpenSSH</li><li class="tag">UFW</li><li class="tag">GPG (AES-256)</li><li class="tag">Bash</li><li class="tag">cron</li><li class="tag">supervisord</li><li class="tag">Nginx</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt : scripts et rapport de mission</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Mission « Excellence Cyber », menée pendant le volet administration système de mon stage chez FusionSoft Labs. J&#39;y jouais un administrateur système junior prenant en charge le serveur du service comptable d&#39;une entreprise fictive, avec un cahier des charges écrit : perte de données maximale (RPO) de 24 heures et temps de restauration (RTO) de 30 minutes.</p></div></section>
+    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Un serveur fraîchement installé, sans aucune protection. Chaque exigence (accès, séparation des données, sauvegardes, disponibilité, traçabilité) devait être satisfaite et démontrée, pas seulement configurée.</p></div></section>
+    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Mettre le serveur au niveau du cahier des charges en sept jours, prouver chaque protection par un test, et terminer la semaine par un auto-audit honnête.</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Un serveur Ubuntu 24.04 dans un conteneur Docker, sur un réseau Docker isolé, à adresse fixe.</li><li>Trois comptes nominatifs : deux administrateurs avec sudo, un compte de service sans shell interactif. Chacun a sa propre paire de clés ed25519 protégée par une passphrase.</li><li>SSH sur un port non standard, connexion root et authentification par mot de passe désactivées ; UFW refuse tout le trafic entrant sauf SSH depuis le sous-réseau d&#39;administration.</li><li>Une tâche nocturne compresse les données comptables, les chiffre avec GPG (AES-256), supprime l&#39;archive en clair et garde sept jours d&#39;historique.</li><li>Nginx supervisé par supervisord ; historique des connexions disponible avec last et lastlog.</li></ul></div></section>
+    
+    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Jour 1 : réseau isolé, comptes nominatifs, SSH par clés uniquement et pare-feu. Les clés publiques ont été déposées avec docker cp, car l&#39;authentification par mot de passe n&#39;a jamais été activée, même temporairement.</li><li>Jours 2–3 : dossier comptable dédié avec le bit SGID ; script de sauvegarde chiffrée avec rotation sur sept jours, puis test de restauration complet.</li><li>Jours 4–5 : redémarrage automatique du service web et traçabilité des connexions.</li><li>Jour 6 : incident non annoncé (un client affirme avoir reçu une facture jamais commandée), investigué sans connaître la réponse.</li><li>Jour 7 : auto-audit de chaque exigence et rapport de mission.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Difficultés et solutions</h2><div class="case-body"><ul><li>UFW refusait de démarrer : un conteneur standard n&#39;a pas les capacités noyau nécessaires. J&#39;ai figé le travail avec docker commit et recréé le conteneur avec NET_ADMIN et NET_RAW, sans rien perdre.</li><li>Pas de systemd ni de journald dans le conteneur, donc pas les outils habituels de redémarrage automatique et de journaux. J&#39;ai utilisé supervisord pour le service, et last/lastlog pour l&#39;historique des connexions, qui fonctionnent sans systemd.</li></ul></div></section>
+    <section class="case-section" id="verification" aria-labelledby="verification-h">
+  <h2 id="verification-h">Journal de vérification</h2>
+  <div class="case-body">
+    <p class="muted small">Chaque affirmation, le test utilisé pour la vérifier et ce qui a été observé.</p>
+    <div class="table-scroll" role="region" aria-label="Journal de vérification" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">Affirmation</th><th scope="col">Comment c’est testé</th><th scope="col">Résultat observé</th></tr></thead>
+      <tbody><tr><th scope="row">root ne peut pas se connecter en SSH</th><td>Tentative de connexion root</td><td><span class="ok-dot" aria-hidden="true"></span>Refusée</td></tr><tr><th scope="row">Clés uniquement, pas de mot de passe</th><td>Connexion par clé, puis par mot de passe</td><td><span class="ok-dot" aria-hidden="true"></span>Clé acceptée · mot de passe refusé</td></tr><tr><th scope="row">Les sauvegardes se restaurent dans le RTO</th><td>Dossier réel déplacé (perte totale), restauration de la dernière archive chiffrée, comparaison fichier par fichier avec diff</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune différence · quelques minutes, très en dessous de 30 min</td></tr><tr><th scope="row">Le service web se rétablit seul</th><td>kill -9 sur le processus Nginx</td><td><span class="ok-dot" aria-hidden="true"></span>Redémarré automatiquement en moins d&#39;une seconde</td></tr><tr><th scope="row">La facture suspecte ne vient pas du serveur</th><td>Revue des connexions admin, tâches planifiées, journaux Nginx et dossier comptable</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune trace de compromission ; le serveur n&#39;a aucune fonction de facturation. Hypothèse : hameçonnage visant le client</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+</section>
+    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Les sept contrôles de l&#39;audit final sont conformes : root SSH bloqué, authentification par clé uniquement, pare-feu en refus par défaut, chiffrement au repos avec rotation sur sept jours, restauration testée et chronométrée, redémarrage automatique, historique des connexions consultable.</li><li>Leçon retenue : ne rien trouver d&#39;anormal dans une enquête est un résultat. Cela oriente vers une autre explication.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites connues</h2><div class="case-body"><ul><li>Un serveur simulé dans un conteneur, pas une machine de production avec de vrais utilisateurs.</li><li>La passphrase des sauvegardes est stockée sur le serveur lui-même. En production, elle devrait être gérée par un coffre-fort de secrets externe.</li><li>Les scripts du dépôt ont été reconstitués après la suppression du conteneur. Ils reproduisent les commandes documentées dans le rapport original, et le dépôt le précise.</li></ul></div></section>
+    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Déplacer le secret des sauvegardes vers un gestionnaire de secrets</li><li>Envoyer les journaux vers un collecteur central ou un SIEM au lieu de les lire sur l&#39;hôte</li><li>Automatiser l&#39;audit final sous forme de contrôle de conformité rejouable</li></ul></div></section>
+    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer">Dépôt : scripts et rapport de mission</a> <span class="muted small">github.com/AGRO-Rachidi/linux-sysadmin-hardening</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="Autres projets">
+    <span></span>
+    <a class="pager-next" href="../../../fr/projects/department-file-server/"><span class="muted small">Suivant <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Un serveur de fichiers cloisonné par service, des groupes Unix à Samba</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+  </div>
+</footer>
+</body>
+</html>
