@@ -378,3 +378,17 @@ a:hover { color: var(--accent); }
 .level-practiced { background: var(--grad); color: #fff; }
 .ledger thead th { background: var(--surface-2); }
 .case-figure img { background: #fff; }
+
+/* Formulaire de contact */
+.contact-inner { align-items: start; }
+.contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 1.4rem; }
+.contact-form .field { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.contact-form .field-full { grid-column: 1 / -1; }
+.contact-form label { font-size: .9rem; font-weight: 600; color: var(--ink-soft); }
+.contact-form input, .contact-form textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line-strong); border-radius: 10px; padding: .7rem .85rem; width: 100%; }
+.contact-form textarea { resize: vertical; min-height: 8rem; }
+.contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: transparent; }
+.form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
+.form-foot p { margin: 0; }
+.botcheck { display: none; }
+@media (max-width: 640px) { .contact-form { grid-template-columns: 1fr; } }

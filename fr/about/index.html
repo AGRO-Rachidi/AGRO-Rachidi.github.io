@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'self' https://api.web3forms.com">
   <meta name="referrer" content="no-referrer">
   <title>À propos · Rachidi AGRO</title>
   <meta name="description" content="Je suis élève-ingénieur en dernière année à l&#39;ENSGMM – UNSTIM (Bénin), porté par une conviction simple : la meilleure façon d&#39;apprendre, c&#39;est de construire.">
@@ -60,11 +60,22 @@
       <p class="eyebrow">Contact</p>
       <h2 id="contact-title">Échangeons</h2>
       <p class="lead">Ouvert aux opportunités partout dans le monde : stages, projets de recherche, collaborations techniques, contributions open source, et postes où je peux apprendre, contribuer et avoir un impact réel aux côtés de professionnels expérimentés.</p>
-    </div>
-    <div class="contact-actions">
-      <a class="btn btn-primary" href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a>
       <p class="muted">Abomey, Bénin · <a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a> · <a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></p>
     </div>
+    <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" accept-charset="UTF-8">
+      <input type="hidden" name="access_key" value="734763cf-79a5-45fe-bb05-6dba560658b3">
+      <input type="hidden" name="subject" value="Nouveau message depuis votre portfolio">
+      <input type="hidden" name="from_name" value="Portfolio Rachidi AGRO">
+      <input type="hidden" name="redirect" value="https://agro-rachidi.github.io/fr/thanks/">
+      <input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="field"><label for="cf-name-fr">Votre nom</label><input id="cf-name-fr" name="name" type="text" required maxlength="100" autocomplete="name"></div>
+      <div class="field"><label for="cf-email-fr">Votre e-mail</label><input id="cf-email-fr" name="email" type="email" required maxlength="150" autocomplete="email"></div>
+      <div class="field field-full"><label for="cf-msg-fr">Votre message</label><textarea id="cf-msg-fr" name="message" required rows="5" maxlength="4000"></textarea></div>
+      <div class="field-full form-foot">
+        <button class="btn btn-primary" type="submit">Envoyer le message <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <p class="muted small">Votre message arrive directement dans ma boîte mail. Vous pouvez aussi écrire à <a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></p>
+      </div>
+    </form>
   </div>
 </section>
 </main>
