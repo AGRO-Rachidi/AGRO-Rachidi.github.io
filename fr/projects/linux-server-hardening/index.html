@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Sécuriser un serveur Linux en sept jours · Rachidi AGRO</title>
   <meta name="description" content="Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../../assets/css/site.css">
-  <script src="../../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,9 +55,7 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt : scripts et rapport de mission</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Mission « Excellence Cyber », menée pendant le volet administration système de mon stage chez FusionSoft Labs. J&#39;y jouais un administrateur système junior prenant en charge le serveur du service comptable d&#39;une entreprise fictive, avec un cahier des charges écrit : perte de données maximale (RPO) de 24 heures et temps de restauration (RTO) de 30 minutes.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Un serveur fraîchement installé, sans aucune protection. Chaque exigence (accès, séparation des données, sauvegardes, disponibilité, traçabilité) devait être satisfaite et démontrée, pas seulement configurée.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Mettre le serveur au niveau du cahier des charges en sept jours, prouver chaque protection par un test, et terminer la semaine par un auto-audit honnête.</p></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Mission « Excellence Cyber », menée pendant le volet administration système de mon stage chez FusionSoft Labs. J&#39;y jouais un administrateur système junior prenant en charge le serveur du service comptable d&#39;une entreprise fictive, avec un cahier des charges écrit : perte de données maximale (RPO) de 24 heures et temps de restauration (RTO) de 30 minutes.</p><p>Un serveur fraîchement installé, sans aucune protection. Chaque exigence (accès, séparation des données, sauvegardes, disponibilité, traçabilité) devait être satisfaite, puis prouvée par un test.</p><p>Mettre le serveur au niveau du cahier des charges en sept jours, prouver chaque protection par un test, et terminer la semaine par un auto-audit honnête.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Un serveur Ubuntu 24.04 dans un conteneur Docker, sur un réseau Docker isolé, à adresse fixe.</li><li>Trois comptes nominatifs : deux administrateurs avec sudo, un compte de service sans shell interactif. Chacun a sa propre paire de clés ed25519 protégée par une passphrase.</li><li>SSH sur un port non standard, connexion root et authentification par mot de passe désactivées ; UFW refuse tout le trafic entrant sauf SSH depuis le sous-réseau d&#39;administration.</li><li>Une tâche nocturne compresse les données comptables, les chiffre avec GPG (AES-256), supprime l&#39;archive en clair et garde sept jours d&#39;historique.</li><li>Nginx supervisé par supervisord ; historique des connexions disponible avec last et lastlog.</li></ul></div></section>
     <div class="case-figures"><figure class="case-figure">
     <img src="../../../assets/img/projects/hardening-access.png" width="1268" height="493" alt="Terminal : réglages sshd (port 2222, root et mots de passe interdits), UFW actif en refus par défaut, connexions par mot de passe refusées" loading="lazy">
@@ -78,13 +76,13 @@
     <div class="table-scroll" role="region" aria-label="Comment je l’ai vérifié" tabindex="0">
     <table class="ledger">
       <thead><tr><th scope="col">Ce que je voulais prouver</th><th scope="col">Le test</th><th scope="col">Ce que j’ai observé</th></tr></thead>
-      <tbody><tr><th scope="row">root ne peut pas se connecter en SSH</th><td>Tentative de connexion root</td><td><span class="ok-dot" aria-hidden="true"></span>Refusée</td></tr><tr><th scope="row">Clés uniquement, pas de mot de passe</th><td>Connexion par clé, puis par mot de passe</td><td><span class="ok-dot" aria-hidden="true"></span>Clé acceptée · mot de passe refusé</td></tr><tr><th scope="row">Les sauvegardes se restaurent dans le RTO</th><td>Restauration de la dernière archive chiffrée dans un dossier à part, puis comparaison fichier par fichier avec diff</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune différence entre la copie restaurée et les données réelles</td></tr><tr><th scope="row">Le service web se rétablit seul</th><td>Arrêt brutal des processus Nginx avec kill -9</td><td><span class="ok-dot" aria-hidden="true"></span>Relancé automatiquement par supervisord en moins d&#39;une seconde, site de nouveau en ligne</td></tr><tr><th scope="row">La facture suspecte ne vient pas du serveur</th><td>Revue des connexions admin, tâches planifiées, journaux Nginx et dossier comptable</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune trace de compromission ; le serveur n&#39;a aucune fonction de facturation. Hypothèse : hameçonnage visant le client</td></tr></tbody>
+      <tbody><tr><th scope="row">root ne peut pas se connecter en SSH</th><td>Tentative de connexion root</td><td><span class="ok-dot" aria-hidden="true"></span>Refusée</td></tr><tr><th scope="row">Connexion par clé uniquement</th><td>Connexion par clé, puis par mot de passe</td><td><span class="ok-dot" aria-hidden="true"></span>Clé acceptée · mot de passe refusé</td></tr><tr><th scope="row">Les sauvegardes se restaurent dans le RTO</th><td>Restauration de la dernière archive chiffrée dans un dossier à part, puis comparaison fichier par fichier avec diff</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune différence entre la copie restaurée et les données réelles</td></tr><tr><th scope="row">Le service web se rétablit seul</th><td>Arrêt brutal des processus Nginx avec kill -9</td><td><span class="ok-dot" aria-hidden="true"></span>Relancé automatiquement par supervisord en moins d&#39;une seconde, site de nouveau en ligne</td></tr><tr><th scope="row">La facture suspecte ne vient pas du serveur</th><td>Revue des connexions admin, tâches planifiées, journaux Nginx et dossier comptable</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune trace de compromission ; le serveur n&#39;a aucune fonction de facturation. Hypothèse : hameçonnage visant le client</td></tr></tbody>
     </table>
     </div>
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Les sept contrôles de l&#39;audit final sont conformes : root SSH bloqué, authentification par clé uniquement, pare-feu en refus par défaut, chiffrement au repos avec rotation sur sept jours, restauration testée et chronométrée, redémarrage automatique, historique des connexions consultable.</li><li>Leçon retenue : ne rien trouver d&#39;anormal dans une enquête est un résultat. Cela oriente vers une autre explication.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Un serveur simulé dans un conteneur, pas une machine de production avec de vrais utilisateurs.</li><li>Après un redémarrage du conteneur, SSH, le pare-feu et supervisord doivent être relancés à la main.</li><li>La passphrase des sauvegardes est stockée sur le serveur lui-même. En production, elle devrait être gérée par un coffre-fort de secrets externe.</li><li>Les scripts du dépôt ont été reconstitués après la suppression du conteneur. Ils reproduisent les commandes documentées dans le rapport original, et le dépôt le précise.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>C&#39;est un serveur simulé dans un conteneur, sans vrais utilisateurs ni vrai trafic.</li><li>Après un redémarrage du conteneur, SSH, le pare-feu et supervisord doivent être relancés à la main.</li><li>La passphrase des sauvegardes est stockée sur le serveur lui-même. En production, elle devrait être gérée par un coffre-fort de secrets externe.</li><li>Les scripts du dépôt ont été reconstitués après la suppression du conteneur. Ils reproduisent les commandes documentées dans le rapport original, et le dépôt le précise.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Ajouter un script de démarrage qui lance SSH, UFW et supervisord à chaque démarrage du conteneur</li><li>Déplacer le secret des sauvegardes vers un gestionnaire de secrets</li><li>Envoyer les journaux vers un collecteur central ou un SIEM au lieu de les lire sur l&#39;hôte</li><li>Automatiser l&#39;audit final sous forme de contrôle de conformité rejouable</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer">Dépôt : scripts et rapport de mission</a> <span class="muted small">github.com/AGRO-Rachidi/linux-sysadmin-hardening</span></li></ul></div></section>
   </div>
@@ -97,7 +95,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
@@ -106,7 +104,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

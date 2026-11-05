@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Un scanner de ports TCP en Rust, réécrit trois fois · Rachidi AGRO</title>
   <meta name="description" content="Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/rust-port-scanner/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../../assets/css/site.css">
-  <script src="../../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,10 +55,8 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt : les trois versions</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Un projet personnel pour apprendre Rust sur un problème lié à la sécurité, construit pendant mon apprentissage de l&#39;ownership, du borrowing et de la concurrence.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Avec un délai de connexion de 10 ms, tester 65 535 ports un par un peut prendre des heures. La question : comment aller plus vite sans gaspiller les ressources de la machine ?</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Construire un scanner qui fonctionne, puis comprendre pourquoi chaque amélioration marche et ce qu&#39;elle coûte.</p></div></section>
-    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1 : une boucle séquentielle avec connect_timeout.</li><li>Version 2 : les ports répartis entre des threads système, résultats renvoyés par un canal mpsc. Le temps total dépend du thread le plus chargé, pas de la somme des ports.</li><li>Version 3 : des tâches asynchrones légères avec Tokio, et un sémaphore qui plafonne les connexions simultanées à 5 000 pour ne saturer ni le système ni le réseau.</li></ul></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Un projet personnel pour apprendre Rust sur un problème lié à la sécurité, construit pendant mon apprentissage de l&#39;ownership, du borrowing et de la concurrence.</p><p>Avec un délai de connexion de 10 ms, tester 65 535 ports un par un peut prendre des heures. La question : comment aller plus vite sans gaspiller les ressources de la machine ?</p><p>Construire un scanner qui fonctionne, puis comprendre pourquoi chaque amélioration marche et ce qu&#39;elle coûte.</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1 : une boucle séquentielle avec connect_timeout.</li><li>Version 2 : les ports répartis entre des threads système, résultats renvoyés par un canal mpsc. Le temps total dépend alors du thread le plus chargé.</li><li>Version 3 : des tâches asynchrones légères avec Tokio, et un sémaphore qui plafonne les connexions simultanées à 5 000 pour ne saturer ni le système ni le réseau.</li></ul></div></section>
     
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Écriture des trois versions l&#39;une après l&#39;autre, en gardant les précédentes en commentaire avant d&#39;en refaire des fichiers autonomes pour le dépôt.</li><li>Documentation du coût de chaque approche : environ 2 Mo de pile par thread système, plus le coût de création et d&#39;ordonnancement, contre des tâches asynchrones bien plus légères.</li></ul></div></section>
     <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>La version 2 était rapide (moins d&#39;une seconde avec 1 000 threads, dans mes essais), mais consacrer 1 000 threads à quelques secondes de travail est un mauvais compromis. Accepter qu&#39;une solution qui marche puisse rester la mauvaise est ce qui m&#39;a conduit à la version 3.</li></ul></div></section>
@@ -75,7 +73,7 @@
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Trois versions fonctionnelles et une comparaison écrite entre threads avec canaux et tâches asynchrones.</li><li>Une habitude conservée : remettre en question une solution qui marche quand son coût est disproportionné.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Balayage TCP connect uniquement ; pas de détection de services.</li><li>Les temps sont informels : la cible et les conditions réseau n&#39;ont pas été notées. Ils donnent des ordres de grandeur, pas un banc de mesure.</li><li>À utiliser uniquement sur des systèmes qui m&#39;appartiennent ou que je suis autorisé à tester.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Balayage TCP connect uniquement ; pas de détection de services.</li><li>Les temps sont informels : je n&#39;ai pas noté la cible ni les conditions réseau, ils ne donnent donc que des ordres de grandeur.</li><li>À utiliser uniquement sur des systèmes qui m&#39;appartiennent ou que je suis autorisé à tester.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Un banc de mesure reproductible (cible fixe, répétitions, médiane)</li><li>Des arguments en ligne de commande plutôt qu&#39;une saisie interactive</li><li>Une lecture simple des bannières de service</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer">Dépôt : les trois versions</a> <span class="muted small">github.com/AGRO-Rachidi/port-scanner-rust</span></li></ul></div></section>
   </div>
@@ -88,7 +86,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
@@ -97,7 +95,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

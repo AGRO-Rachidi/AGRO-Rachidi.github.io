@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Projects · Rachidi AGRO</title>
   <meta name="description" content="For each project I explain where it came from, what I did, how I checked that it really worked, and what I would still improve. The code and reports are linked at the end.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../assets/css/site.css">
-  <script src="../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -54,7 +54,6 @@
           <span class="card-title">Securing a Linux server in seven days</span>
           <span class="card-summary">During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and checked each step with a real test.</span>
           <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">OpenSSH</span><span class="tag">UFW</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -65,7 +64,6 @@
           <span class="card-title">A department-isolated file server, from Unix groups to Samba</span>
           <span class="card-summary">Four departments, seven employee accounts, and one simple rule: each team sees only its own files. I built it with Unix groups and ACLs, automated it with a Bash script that can safely be run again, shared it over the network with Samba, and tested every access with real employee accounts.</span>
           <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">Bash</span><span class="tag">POSIX ACL (setfacl)</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -76,7 +74,6 @@
           <span class="card-title">Enterprise network labs: from VLANs to a secured multi-site design</span>
           <span class="card-summary">Six labs that took me from my first VLAN to a complete multi-site network: an addressing plan built around real needs, a security policy turned into ACLs, and layer-2 protections. The screenshots are my own project files, with the notes I left when each test passed.</span>
           <span class="work-tags"><span class="tag">Cisco Packet Tracer 8</span><span class="tag">Cisco IOS 15</span><span class="tag">VLAN / 802.1Q</span><span class="tag">Static · RIPv2 · OSPF</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -99,7 +96,6 @@ for port in port_debut..=port_fin {
           <span class="card-title">A TCP port scanner in Rust, rewritten three times</span>
           <span class="card-summary">I wanted to learn Rust on something useful, so I wrote a port scanner, then rewrote it twice once I understood why the previous version was slow or wasteful.</span>
           <span class="work-tags"><span class="tag">Rust</span><span class="tag">std::thread</span><span class="tag">mpsc channels</span><span class="tag">Tokio (async/await)</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -110,7 +106,6 @@ for port in port_debut..=port_fin {
           <span class="card-title">Cassandra in practice: a 3-node cluster, a failure test and ten years of data</span>
           <span class="card-summary">With two classmates, I explored how Cassandra copes with large amounts of data: we designed the schema around our queries, ran a 3-node cluster that kept answering with one node down, and compared it with PostgreSQL over ten years of simulated sensor data.</span>
           <span class="work-tags"><span class="tag">Apache Cassandra 5.0</span><span class="tag">CQL</span><span class="tag">PostgreSQL 15</span><span class="tag">Docker</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -137,7 +132,6 @@ for port in port_debut..=port_fin {
           <span class="card-title">Python for security: a learning log</span>
           <span class="card-summary">Learning Python with security examples instead of « hello world »: a script that extracts IPv4 addresses from a log, classifies them with the ipaddress module and writes TXT, JSON and CSV reports, plus a small TCP scanner limited to localhost.</span>
           <span class="work-tags"><span class="tag">Python 3</span><span class="tag">re</span><span class="tag">ipaddress</span><span class="tag">json · csv</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -156,7 +150,6 @@ do e = 1, nproc - 1
           <span class="card-title">Parallel programming with Fortran and MPI</span>
           <span class="card-summary">From the first MPI_Send to dynamic load balancing: point-to-point exchanges, Scatter/Gather on matrices, and a master–worker scheme that hands 150 Newton-method problems to whichever process is free first.</span>
           <span class="work-tags"><span class="tag">Fortran 2008</span><span class="tag">MPI (mpi_f08)</span><span class="tag">Open MPI</span><span class="tag">LAPACK</span></span>
-          <span class="card-cta">Read the case study <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li>
@@ -165,7 +158,7 @@ do e = 1, nproc - 1
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
@@ -174,7 +167,7 @@ do e = 1, nproc - 1
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

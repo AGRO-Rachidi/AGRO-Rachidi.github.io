@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Un serveur de fichiers cloisonné par service, des groupes Unix à Samba · Rachidi AGRO</title>
   <meta name="description" content="Quatre services, sept comptes d&#39;employés, et une règle simple : chaque équipe ne voit que ses propres fichiers. Je l&#39;ai construit avec des groupes Unix et des ACL, automatisé avec un script Bash qu&#39;on peut relancer sans risque, partagé sur le réseau avec Samba, et j&#39;ai testé chaque accès avec de vrais comptes d&#39;employés.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/department-file-server/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../../assets/css/site.css">
-  <script src="../../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,9 +55,7 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-permissions-multiservice" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt : script, configuration Samba, rapports</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Deuxième projet du volet système de mon stage chez FusionSoft Labs : un serveur de fichiers pour « TechCorp », une entreprise fictive avec RH, IT, Finance et Direction, construit dans un laboratoire conteneurisé isolé.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Chaque service doit accéder à ses propres documents et à un espace commun, et à rien d&#39;autre. L&#39;installation devait aussi être reproductible : retaper les mêmes sept commandes par service avait déjà produit de vraies erreurs.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Le moindre privilège sur le disque, les mêmes garanties à travers le réseau, et un script d&#39;installation que l&#39;on peut relancer sans risque.</p></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Deuxième projet du volet système de mon stage chez FusionSoft Labs : un serveur de fichiers pour « TechCorp », une entreprise fictive avec RH, IT, Finance et Direction, construit dans un laboratoire conteneurisé isolé.</p><p>Chaque service doit accéder à ses propres documents et à un espace commun, et à rien d&#39;autre. L&#39;installation devait aussi être reproductible : retaper les mêmes sept commandes par service avait déjà produit de vraies erreurs.</p><p>Le moindre privilège sur le disque, les mêmes garanties à travers le réseau, et un script d&#39;installation que l&#39;on peut relancer sans risque.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Un groupe Unix et un dossier par service, en mode 770 avec le bit SGID, plus un dossier commun accessible via un groupe secondaire partagé.</li><li>Des ACL POSIX sur le dossier parent donnent à chaque service uniquement le droit de traversée (x).</li><li>Un script Bash idempotent à trois fonctions (créer le service, créer les utilisateurs, préparer les dossiers) qui vérifie l&#39;état existant avant d&#39;agir.</li><li>Des partages Samba sous /srv (selon la norme FHS), un par groupe : valid users = @groupe, create mask 0660, configuration validée avec testparm.</li></ul></div></section>
     <div class="case-figures"><figure class="case-figure">
     <img src="../../../assets/img/projects/techcorp-idem.png" width="964" height="1033" alt="Terminal : la première exécution de techcorp_setup.sh crée 4 groupes, les dossiers et 7 utilisateurs ; la seconde indique que tout existe déjà" loading="lazy">
@@ -70,7 +68,7 @@
     <figcaption>Les mêmes règles tiennent à travers le réseau, avec Samba.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Construction du modèle à la main d&#39;abord, puis remplacement de la répétition par un script. Les employés sont stockés sous la forme utilisateur:groupe et découpés par expansion de paramètres Bash, sans commande externe.</li><li>Correction de vrais bugs en cours de route : un test qui exécutait une variable au lieu de l&#39;évaluer ; useradd qui échouait en silence pendant que le script affichait « créé » (corrigé en testant le code de sortie) ; une comparaison faite contre la ligne getent entière au lieu de son premier champ.</li><li>Ouverture au réseau avec Samba : un compte système et un compte Samba distinct par employé, créés en boucle.</li><li>Tous les tests faits avec le vrai compte de chaque employé, jamais en root.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>Un utilisateur correctement configuré se voyait quand même refuser l&#39;accès à son propre dossier. La cause était le dossier parent : atteindre un fichier exige le droit de traversée sur chaque dossier du chemin. Un dossier n&#39;a qu&#39;un seul groupe propriétaire, et « chmod o+x » aurait ouvert la traversée à tous les comptes du système, en violation du moindre privilège. Les ACL POSIX (setfacl -m g:&lt;groupe&gt;:x) ont résolu le problème sans changer le propriétaire.</li><li>Le SGID garantit le groupe d&#39;un nouveau fichier, pas son droit d&#39;écriture. Avec l&#39;umask par défaut 0022, les nouveaux fichiers étaient en -rw-r--r--. Un dossier d&#39;équipe fonctionnel a besoin des deux réglages, et la persistance de l&#39;umask passe par un fichier de profil ou par des ACL par défaut.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>Un utilisateur correctement configuré se voyait quand même refuser l&#39;accès à son propre dossier. La cause était le dossier parent : atteindre un fichier exige le droit de traversée sur chaque dossier du chemin. Un dossier n&#39;a qu&#39;un seul groupe propriétaire, et « chmod o+x » aurait ouvert la traversée à tous les comptes du système, en violation du moindre privilège. Les ACL POSIX (setfacl -m g:&lt;groupe&gt;:x) ont résolu le problème sans changer le propriétaire.</li><li>Le SGID fixe le groupe d&#39;un nouveau fichier ; le droit d&#39;écriture du groupe, lui, dépend de l&#39;umask. Avec l&#39;umask par défaut 0022, les nouveaux fichiers étaient en -rw-r--r--. Un dossier d&#39;équipe fonctionnel a besoin des deux réglages, et la persistance de l&#39;umask passe par un fichier de profil ou par des ACL par défaut.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
   <h2 id="verification-h">Comment je l’ai vérifié</h2>
   <div class="case-body">
@@ -84,7 +82,7 @@
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Résultats</h2><div class="case-body"><ul><li>Un serveur de fichiers où chaque accès autorisé fonctionne et chaque accès interdit échoue exactement là où il doit, en local comme en SMB.</li><li>Un script de provisionnement réutilisable et idempotent, et une explication écrite de chaque choix de permission.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Un laboratoire en conteneur avec des comptes fictifs, pas l&#39;annuaire d&#39;une entreprise.</li><li>Les identités sont locales ; il n&#39;y a pas d&#39;annuaire central (LDAP ou Active Directory).</li><li>Dans le dépôt, la partie Samba est une compilation de commandes exécutées et validées une à une, pas un script original. Le README le précise.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>C&#39;est un laboratoire en conteneur, avec des comptes fictifs.</li><li>Les identités sont locales ; il n&#39;y a pas d&#39;annuaire central (LDAP ou Active Directory).</li><li>Dans le dépôt, la partie Samba rassemble des commandes que j&#39;ai d&#39;abord exécutées et vérifiées une à une à la main. Le README le précise.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">Ce que j’améliorerais</h2><div class="case-body"><ul><li>Des ACL par défaut pour que l&#39;écriture de groupe ne dépende plus de l&#39;umask de chacun</li><li>Des identités centralisées avec Samba AD ou LDAP</li><li>La journalisation des accès aux partages</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-permissions-multiservice" rel="noopener noreferrer">Dépôt : script, configuration Samba, rapports</a> <span class="muted small">github.com/AGRO-Rachidi/linux-permissions-multiservice</span></li></ul></div></section>
   </div>
@@ -97,7 +95,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
@@ -106,7 +104,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

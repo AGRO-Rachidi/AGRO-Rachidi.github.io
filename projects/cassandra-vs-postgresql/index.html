@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Cassandra in practice: a 3-node cluster, a failure test and ten years of data · Rachidi AGRO</title>
   <meta name="description" content="With two classmates, I explored how Cassandra copes with large amounts of data: we designed the schema around our queries, ran a 3-node cluster that kept answering with one node down, and compared it with PostgreSQL over ten years of simulated sensor data.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/cassandra-vs-postgresql/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css">
-  <script src="../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,10 +55,8 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/cassandra-wide-column-study" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: report, CQL, benchmark, raw results</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Group 4 of the Information Systems course (ENSGMM, 2026–2027), three students, supervised by the course lecturer. The topic: how wide-column databases handle massive distributed data, and what they give up in exchange.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>A sensor network writes a reading every few seconds, for years. The database has to keep reads fast as history grows, survive the loss of a machine, and stay within the disk budget.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Show the model&#39;s logic on a real cluster, then measure where it wins and where it loses against a well-indexed relational database.</p></div></section>
-    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Schema designed from six queries, giving four tables. Duplication is expected in this model.</li><li>Partition key (sensor_id, day): day bucketing caps each partition at about 8,640 rows per sensor per day. A clustering key on the timestamp keeps time ranges fast.</li><li>Three Cassandra 5.0 nodes in Docker with limited Java heap; keyspace with RF = 3, plus a test keyspace at RF = 1 to make partitioning visible.</li><li>A benchmark harness in Python loads one year at a time (1.75 million rows each) into both Cassandra and PostgreSQL, then times the same queries.</li></ul></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Group 4 of the Information Systems course (ENSGMM, 2026–2027), three students, supervised by the course lecturer. The topic: how wide-column databases handle massive distributed data, and what they give up in exchange.</p><p>A sensor network writes a reading every few seconds, for years. The database has to keep reads fast as history grows, survive the loss of a machine, and stay within the disk budget.</p><p>Show the model&#39;s logic on a real cluster, then measure where it wins and where it loses against a well-indexed relational database.</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Schema designed from six queries, giving four tables. Duplication is expected in this model.</li><li>Partition key (sensor_id, day): day bucketing caps each partition at about 8,640 rows per sensor per day. A clustering key on the timestamp keeps time ranges fast.</li><li>Three Cassandra 5.0 nodes in Docker with limited Java heap; keyspace with RF = 3, plus a test keyspace at RF = 1 to make partitioning visible.</li><li>A Python benchmark script loads one year at a time (1.75 million rows each) into both Cassandra and PostgreSQL, then times the same queries.</li></ul></div></section>
     <div class="case-figures"><figure class="case-figure">
     <img src="../../assets/img/projects/cassandra-quorum.png" width="920" height="382" alt="Terminal output: node cass3 stopped, query Q1 at consistency QUORUM still returns three rows" loading="lazy">
     <figcaption>Failure test: one node down, the QUORUM read still succeeds.</figcaption>
@@ -77,7 +75,7 @@
     </div>
   </div>
 </section>
-    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>A clear picture of the trade-off: Cassandra keeps planned queries fast whatever the history depth, writes and stores efficiently, but needs every question decided before the first write.</li><li>Design lesson: in a wide-column database, modelling is about access paths as much as about data.</li></ul></div></section>
+    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>A clear picture of the trade-off: Cassandra keeps planned queries fast whatever the history depth, writes and stores efficiently, but needs every question decided before the first write.</li><li>Design lesson: in a wide-column database, modeling is about access paths as much as about data.</li></ul></div></section>
     <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>All nodes on one machine: nothing is measured about scaling out, Cassandra&#39;s main advantage.</li><li>Timings include the Python drivers and the Docker network.</li><li>Group work: the report and code are shared by the three authors.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Repeat the benchmark on several machines</li><li>Measure at the original 10-second rate on a smaller time window</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/cassandra-wide-column-study" rel="noopener noreferrer">Repository: report, CQL, benchmark, raw results</a> <span class="muted small">github.com/AGRO-Rachidi/cassandra-wide-column-study</span></li></ul></div></section>
@@ -91,7 +89,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
@@ -100,7 +98,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

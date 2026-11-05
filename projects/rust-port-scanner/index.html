@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>A TCP port scanner in Rust, rewritten three times · Rachidi AGRO</title>
   <meta name="description" content="I wanted to learn Rust on something useful, so I wrote a port scanner, then rewrote it twice once I understood why the previous version was slow or wasteful.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/rust-port-scanner/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css">
-  <script src="../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,10 +55,8 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: the three versions</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>A personal project to learn Rust on a security-flavoured problem, built while I was learning ownership, borrowing and concurrency.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>With a 10 ms connection timeout, testing 65,535 ports one by one can take hours. The question was how to go faster without wasting the machine&#39;s resources.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Build a working scanner, then understand why each improvement works and what it costs.</p></div></section>
-    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1: a sequential loop with connect_timeout.</li><li>Version 2: ports split across OS threads, results sent back over an mpsc channel. The total time depends on the busiest thread, not on the sum of all ports.</li><li>Version 3: lightweight async tasks with Tokio, and a semaphore capping simultaneous connections at 5,000 so the system and the network are not flooded.</li></ul></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>A personal project to learn Rust on a security-flavoured problem, built while I was learning ownership, borrowing and concurrency.</p><p>With a 10 ms connection timeout, testing 65,535 ports one by one can take hours. The question was how to go faster without wasting the machine&#39;s resources.</p><p>Build a working scanner, then understand why each improvement works and what it costs.</p></div></section>
+    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1: a sequential loop with connect_timeout.</li><li>Version 2: ports split across OS threads, results sent back over an mpsc channel. The total time then depends on the busiest thread.</li><li>Version 3: lightweight async tasks with Tokio, and a semaphore capping simultaneous connections at 5,000 so the system and the network are not flooded.</li></ul></div></section>
     
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Wrote the three versions in sequence, keeping the earlier ones as comments before turning them back into standalone files for the repository.</li><li>Documented the cost of each approach: about 2 MB of stack per OS thread, plus creation and scheduling overhead, against much lighter async tasks.</li></ul></div></section>
     <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>Version 2 was fast (under a second with 1,000 threads, in my tests) but spending 1,000 threads on a few seconds of work is a poor trade. Accepting that a working solution was still the wrong one is what led to version 3.</li></ul></div></section>
@@ -75,7 +73,7 @@
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>Three working versions and a written comparison of threads with channels versus async tasks.</li><li>A habit I kept: question a working solution when its cost is out of proportion.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>TCP connect scan only; no service detection.</li><li>Timings are informal: the target and network conditions were not recorded, so they show orders of magnitude, not a benchmark.</li><li>To be used only on systems I own or am authorised to test.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>TCP connect scan only; no service detection.</li><li>Timings are informal: I didn&#39;t record the target or the network conditions, so they only give orders of magnitude.</li><li>To be used only on systems I own or am authorised to test.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>A reproducible benchmark (fixed target, repeated runs, median)</li><li>Command-line arguments instead of interactive input</li><li>Basic banner grabbing</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer">Repository: the three versions</a> <span class="muted small">github.com/AGRO-Rachidi/port-scanner-rust</span></li></ul></div></section>
   </div>
@@ -88,7 +86,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
@@ -97,7 +95,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Securing a Linux server in seven days · Rachidi AGRO</title>
   <meta name="description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and checked each step with a real test.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/linux-server-hardening/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css">
-  <script src="../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,9 +55,7 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: scripts and mission report</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Mission « Excellence Cyber », run during the systems-administration part of my internship at FusionSoft Labs. I played a junior sysadmin taking over the server of a fictional company&#39;s accounting department, with a written specification: recovery point objective (RPO) of 24 hours and recovery time objective (RTO) of 30 minutes.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>A freshly installed server with no protection. Every requirement (access, data separation, backups, availability, traceability) had to be met and demonstrated, not just configured.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Bring the server to the specification in seven days, prove each control with a test, and close the week with an honest self-audit.</p></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Mission « Excellence Cyber », run during the systems-administration part of my internship at FusionSoft Labs. I played a junior sysadmin taking over the server of a fictional company&#39;s accounting department, with a written specification: recovery point objective (RPO) of 24 hours and recovery time objective (RTO) of 30 minutes.</p><p>A freshly installed server with no protection. Every requirement (access, data separation, backups, availability, traceability) had to be met, then shown to work with a test.</p><p>Bring the server to the specification in seven days, prove each control with a test, and close the week with an honest self-audit.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Ubuntu 24.04 server in a Docker container, on its own isolated Docker network with a fixed address.</li><li>Three named accounts: two administrators with sudo, one service account with no interactive shell. Each has its own ed25519 key pair protected by a passphrase.</li><li>SSH on a non-default port, root login and password authentication disabled; UFW denies all incoming traffic except SSH from the administration subnet.</li><li>A nightly job compresses the accounting data, encrypts it with GPG (AES-256), deletes the clear archive and keeps seven days of history.</li><li>Nginx supervised by supervisord; connection history available through last and lastlog.</li></ul></div></section>
     <div class="case-figures"><figure class="case-figure">
     <img src="../../assets/img/projects/hardening-access.png" width="1268" height="493" alt="Terminal: sshd settings (port 2222, root login and passwords disabled), UFW active with default deny, password logins refused" loading="lazy">
@@ -69,7 +67,7 @@
     <img src="../../assets/img/projects/hardening-resil.png" width="964" height="433" alt="Terminal: all Nginx processes killed, supervisord starts a new master and workers, site answers HTTP 200" loading="lazy">
     <figcaption>Resilience: Nginx comes back on its own after a crash.</figcaption>
   </figure></div>
-    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Day 1: isolated network, named accounts, key-only SSH and firewall. Public keys were copied in with docker cp, because password authentication was never enabled, not even temporarily.</li><li>Days 2–3: dedicated accounting folder with the SGID bit; encrypted backup script with seven-day rotation, then a full restore test.</li><li>Days 4–5: automatic restart of the web service, and connection traceability.</li><li>Day 6: an unannounced incident (a customer claims to have received an invoice they never ordered), investigated without knowing the answer.</li><li>Day 7: self-audit of every requirement and a mission report.</li></ul></div></section>
+    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Day 1: isolated network, named accounts, key-only SSH and firewall. Public keys were copied in with docker cp, because password authentication stayed disabled from the start.</li><li>Days 2–3: dedicated accounting folder with the SGID bit; encrypted backup script with seven-day rotation, then a full restore test.</li><li>Days 4–5: automatic restart of the web service, and connection traceability.</li><li>Day 6: an unannounced incident (a customer claims to have received an invoice they never ordered), investigated without knowing the answer.</li><li>Day 7: self-audit of every requirement and a mission report.</li></ul></div></section>
     <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>UFW would not start: a standard container lacks the kernel capabilities it needs. I froze the work with docker commit and recreated the container with NET_ADMIN and NET_RAW, without losing anything.</li><li>No systemd or journald inside the container, so the usual tools for automatic restart and logs were missing. I used supervisord for the service and last/lastlog for connection history, which work without systemd.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
   <h2 id="verification-h">How I checked it</h2>
@@ -84,7 +82,7 @@
   </div>
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>All seven controls of the final audit met: SSH root blocked, key-only authentication, default-deny firewall, encryption at rest with seven-day rotation, restore tested and timed, automatic restart, consultable connection history.</li><li>A lesson I kept: finding nothing abnormal in an investigation is a result. It points to another explanation.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>A simulated server in a container, not a production machine with real users.</li><li>After a container restart, SSH, the firewall and supervisord have to be started again by hand.</li><li>The backup passphrase is stored on the server itself. In production it should live in an external secrets manager.</li><li>The scripts in the repository were rebuilt after the container was deleted. They reproduce the commands documented in the original report, and the repository says so.</li></ul></div></section>
+    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>It&#39;s a simulated server in a container, without real users or real traffic.</li><li>After a container restart, SSH, the firewall and supervisord have to be started again by hand.</li><li>The backup passphrase is stored on the server itself. In production it should live in an external secrets manager.</li><li>The scripts in the repository were rebuilt after the container was deleted. They reproduce the commands documented in the original report, and the repository says so.</li></ul></div></section>
     <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Add an entrypoint script that starts SSH, UFW and supervisord whenever the container boots</li><li>Move the backup secret to a dedicated secrets manager</li><li>Forward logs to a central collector or SIEM instead of reading them on the host</li><li>Automate the final audit as a repeatable compliance check</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-sysadmin-hardening" rel="noopener noreferrer">Repository: scripts and mission report</a> <span class="muted small">github.com/AGRO-Rachidi/linux-sysadmin-hardening</span></li></ul></div></section>
   </div>
@@ -97,7 +95,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
@@ -106,7 +104,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

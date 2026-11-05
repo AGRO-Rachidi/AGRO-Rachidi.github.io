@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Projets · Rachidi AGRO</title>
   <meta name="description" content="Pour chaque projet, j’explique d’où il vient, ce que j’ai fait, comment j’ai vérifié qu’il fonctionnait vraiment, et ce que j’améliorerais encore. Le code et les rapports sont liés à la fin.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css">
-  <script src="../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -54,7 +54,6 @@
           <span class="card-title">Sécuriser un serveur Linux en sept jours</span>
           <span class="card-summary">Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.</span>
           <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">OpenSSH</span><span class="tag">UFW</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -65,7 +64,6 @@
           <span class="card-title">Un serveur de fichiers cloisonné par service, des groupes Unix à Samba</span>
           <span class="card-summary">Quatre services, sept comptes d&#39;employés, et une règle simple : chaque équipe ne voit que ses propres fichiers. Je l&#39;ai construit avec des groupes Unix et des ACL, automatisé avec un script Bash qu&#39;on peut relancer sans risque, partagé sur le réseau avec Samba, et j&#39;ai testé chaque accès avec de vrais comptes d&#39;employés.</span>
           <span class="work-tags"><span class="tag">Ubuntu 24.04</span><span class="tag">Docker</span><span class="tag">Bash</span><span class="tag">POSIX ACL (setfacl)</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -76,7 +74,6 @@
           <span class="card-title">Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée</span>
           <span class="card-summary">Six labos qui m&#39;ont mené de ma première VLAN à un réseau multi-sites complet : un plan d&#39;adressage construit à partir de vrais besoins, une politique de sécurité traduite en ACL, et des protections de niveau 2. Les captures sont mes propres fichiers de projet, avec les notes que j&#39;ai laissées quand chaque test passait.</span>
           <span class="work-tags"><span class="tag">Cisco Packet Tracer 8</span><span class="tag">Cisco IOS 15</span><span class="tag">VLAN / 802.1Q</span><span class="tag">Static · RIPv2 · OSPF</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -99,7 +96,6 @@ for port in port_debut..=port_fin {
           <span class="card-title">Un scanner de ports TCP en Rust, réécrit trois fois</span>
           <span class="card-summary">Je voulais apprendre Rust sur quelque chose d&#39;utile : j&#39;ai écrit un scanner de ports, puis je l&#39;ai réécrit deux fois, à chaque fois que j&#39;ai compris pourquoi la version précédente était lente ou gourmande.</span>
           <span class="work-tags"><span class="tag">Rust</span><span class="tag">std::thread</span><span class="tag">mpsc channels</span><span class="tag">Tokio (async/await)</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -110,7 +106,6 @@ for port in port_debut..=port_fin {
           <span class="card-title">Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données</span>
           <span class="card-summary">Avec deux camarades, j&#39;ai exploré la façon dont Cassandra gère de gros volumes de données : nous avons conçu le schéma à partir de nos requêtes, fait tourner un cluster de 3 nœuds qui répondait encore avec un nœud arrêté, et comparé Cassandra à PostgreSQL sur dix ans de mesures de capteurs simulées.</span>
           <span class="work-tags"><span class="tag">Apache Cassandra 5.0</span><span class="tag">CQL</span><span class="tag">PostgreSQL 15</span><span class="tag">Docker</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -137,7 +132,6 @@ for port in port_debut..=port_fin {
           <span class="card-title">Python pour la sécurité : un journal d&#39;apprentissage</span>
           <span class="card-summary">Apprendre Python avec des exemples de sécurité plutôt qu&#39;un « hello world » : un script qui extrait les adresses IPv4 d&#39;un journal, les classe avec le module ipaddress et produit des rapports TXT, JSON et CSV, plus un petit scanner TCP limité à localhost.</span>
           <span class="work-tags"><span class="tag">Python 3</span><span class="tag">re</span><span class="tag">ipaddress</span><span class="tag">json · csv</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li><li>
@@ -156,7 +150,6 @@ do e = 1, nproc - 1
           <span class="card-title">Programmation parallèle en Fortran avec MPI</span>
           <span class="card-summary">Du premier MPI_Send à l&#39;équilibrage dynamique de charge : échanges point à point, Scatter/Gather sur des matrices, et un schéma maître–esclaves qui confie 150 problèmes résolus par la méthode de Newton au premier processus libre.</span>
           <span class="work-tags"><span class="tag">Fortran 2008</span><span class="tag">MPI (mpi_f08)</span><span class="tag">Open MPI</span><span class="tag">LAPACK</span></span>
-          <span class="card-cta">Lire l’étude de cas <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </span>
       </a>
     </li>
@@ -165,7 +158,7 @@ do e = 1, nproc - 1
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
@@ -174,7 +167,7 @@ do e = 1, nproc - 1
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Enterprise network labs: from VLANs to a secured multi-site design · Rachidi AGRO</title>
   <meta name="description" content="Six labs that took me from my first VLAN to a complete multi-site network: an addressing plan built around real needs, a security policy turned into ACLs, and layer-2 protections. The screenshots are my own project files, with the notes I left when each test passed.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/enterprise-network-labs/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css">
-  <script src="../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,9 +55,7 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/cisco-networking-labs" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: configurations of the six labs</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Network part of my internship at FusionSoft Labs, supervised by a network engineer. The labs follow the order an engineer would: interconnect, segment, route, filter, then design a whole site from business needs.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>Design an enterprise network that separates departments, routes between them on purpose, filters what each one may reach, and can grow without being renumbered.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Understand each mechanism by building it, validate it with connectivity tests, and justify every design choice (subnet size, routing protocol, filter placement).</p></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>Network part of my internship at FusionSoft Labs, supervised by a network engineer. The labs follow the order an engineer would: interconnect, segment, route, filter, then design a whole site from business needs.</p><p>Design an enterprise network that separates departments, routes between them on purpose, filters what each one may reach, and can grow without being renumbered.</p><p>Understand each mechanism by building it, validate it with connectivity tests, and justify every design choice (subnet size, routing protocol, filter placement).</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Labs 1–2: five VLANs (HR, Accounting, IT, Management, management VLAN 99) routed with Router-on-a-Stick over an 802.1Q trunk; then an extended ACL preventing the Sales VLAN from reaching Admin, and port security limiting each access port to one MAC address.</li><li>Lab 3: four remote sites in a serial loop, routed successively with static routes, RIPv2 and single-area OSPF.</li><li>Lab 4: VLSM split of 172.25.0.0/16 across three VLANs of different sizes, with inter-VLAN routing on a multilayer switch (SVIs) and DHCP.</li><li>Lab 5: a /24 redesigned with VLSM, three application servers, a security policy written as extended ACLs applied close to the source, unused ports shut, DHCP snooping and dynamic ARP inspection.</li><li>Lab 6: headquarters with eight segments (voice, guests, IT/SOC, accounting, cameras, servers, HR, management), a core multilayer switch with DHCP relay, pruned trunks, a voice VLAN on shared ports, and two branches over serial WAN links with OSPF.</li></ul></div></section>
     <div class="case-figures"><figure class="case-figure">
     <img src="../../assets/img/projects/net-acl-validated.png" width="1346" height="395" alt="Packet Tracer: three VLANs (Admin, IT, Commercial) behind one switch and a 2911 router, with the note &#39;Tout est OK! Commercial ne peut pas communiquer avec admin&#39;" loading="lazy">
@@ -69,7 +67,7 @@
     <img src="../../assets/img/projects/net-vlsm-svi.png" width="1346" height="395" alt="Packet Tracer: three VLANs addressed with VLSM in 172.25.0.0/16, routed by a multilayer switch" loading="lazy">
     <figcaption>National exam mock: VLSM and inter-VLAN routing on a multilayer switch.</figcaption>
   </figure><figure class="case-figure">
-    <img src="../../assets/img/projects/lab6-multisite.png" width="1362" height="210" alt="Packet Tracer overview of lab 6: firewall, router and core switch serving eight colour-coded segments" loading="lazy">
+    <img src="../../assets/img/projects/lab6-multisite.png" width="1362" height="210" alt="Packet Tracer overview of lab 6: firewall, router and core switch serving eight color-coded segments" loading="lazy">
     <figcaption>Lab 6: headquarters, eight segments behind the core switch.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Before drawing anything, I start from questions: how many departments, how many devices in each, what growth over the next two years, what budget. The answers decide the subnet sizes.</li><li>I write the security policy as a simple table first (who, towards what, which service, allowed or not), then translate each line into an ACL. A manager never asks for an ACL; they ask that accountants should not see HR files.</li><li>Configured every device from the IOS command line and kept the configurations.</li><li>Sized lab 6 from estimated equipment counts: 196 devices plus about 50 % growth, around 368 addresses. A /24 (254 usable) was too small, a /23 (510) left no real margin, a /22 (1,022) fit with room to grow.</li><li>Wrote lab 5&#39;s policy as one ACL per source, for example: the Users VLAN may reach the DNS/web server on TCP 80, TCP 443 and UDP 53 only.</li><li>Alongside the six labs: a services lab with five dedicated servers (DHCP, DNS, web, FTP, mail), each configured and tested from the client machines, with a troubleshooting section for each service.</li></ul></div></section>
@@ -88,7 +86,7 @@
 </section>
     <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>Six working topologies with their configurations, and an addressing plan where every subnet size is argued.</li><li>A concrete feel for routing trade-offs: static routing becomes heavy as networks multiply, RIP is simple but limited, OSPF is closest to a real enterprise network.</li></ul></div></section>
     <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>Simulation only (Packet Tracer), no physical equipment.</li><li>The raw outputs of the verification commands were not kept at the time. Results come from annotations in the project files and from screenshots of the active topologies, as the repository states.</li><li>All addresses are private simulation ranges with no link to a real infrastructure.</li></ul></div></section>
-    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Keep the show command outputs as evidence for every future lab</li><li>Add IPv6 and centralised logging (syslog) to the multi-site design</li><li>Rebuild part of it on real or emulated IOS</li></ul></div></section>
+    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>Keep the show command outputs as evidence for every future lab</li><li>Add IPv6 and centralized logging (syslog) to the multi-site design</li><li>Rebuild part of it on real or emulated IOS</li></ul></div></section>
     <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/cisco-networking-labs" rel="noopener noreferrer">Repository: configurations of the six labs</a> <span class="muted small">github.com/AGRO-Rachidi/cisco-networking-labs</span></li></ul></div></section>
   </div>
   <nav class="wrap pager" aria-label="More projects">
@@ -100,7 +98,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
     </div>
     <ul class="footer-links">
@@ -109,7 +107,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Static site, no trackers, no cookies · Updated 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>

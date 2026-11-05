@@ -7,7 +7,7 @@
   <meta name="referrer" content="no-referrer">
   <title>Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée · Rachidi AGRO</title>
   <meta name="description" content="Six labos qui m&#39;ont mené de ma première VLAN à un réseau multi-sites complet : un plan d&#39;adressage construit à partir de vrais besoins, une politique de sécurité traduite en ACL, et des protections de niveau 2. Les captures sont mes propres fichiers de projet, avec les notes que j&#39;ai laissées quand chaque test passait.">
-  <meta name="author" content="Rachidi Tchêgoun AGRO">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
@@ -20,8 +20,8 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/enterprise-network-labs/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../../assets/css/site.css">
-  <script src="../../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../../assets/css/site.css?v=ce1f9bac2a">
+  <script src="../../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
 <body>
@@ -55,9 +55,7 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/cisco-networking-labs" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt : configurations des six labos</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Volet réseau de mon stage chez FusionSoft Labs, encadré par un ingénieur réseau. Les labos suivent l&#39;ordre d&#39;un ingénieur : interconnecter, segmenter, router, filtrer, puis concevoir un site entier à partir de besoins métier.</p></div></section>
-    <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Concevoir un réseau d&#39;entreprise qui sépare les services, route volontairement entre eux, filtre ce que chacun peut atteindre, et peut grandir sans être entièrement redécoupé.</p></div></section>
-    <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Comprendre chaque mécanisme en le construisant, le valider par des tests de connectivité, et justifier chaque choix de conception (taille de sous-réseau, protocole de routage, placement des filtres).</p></div></section>
+    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Contexte</h2><div class="case-body"><p>Volet réseau de mon stage chez FusionSoft Labs, encadré par un ingénieur réseau. Les labos suivent l&#39;ordre d&#39;un ingénieur : interconnecter, segmenter, router, filtrer, puis concevoir un site entier à partir de besoins métier.</p><p>Concevoir un réseau d&#39;entreprise qui sépare les services, route volontairement entre eux, filtre ce que chacun peut atteindre, et peut grandir sans être entièrement redécoupé.</p><p>Comprendre chaque mécanisme en le construisant, le valider par des tests de connectivité, et justifier chaque choix de conception (taille de sous-réseau, protocole de routage, placement des filtres).</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Labos 1–2 : cinq VLAN (RH, Comptabilité, Informatique, Direction, VLAN de management 99) routés en Router-on-a-Stick sur un trunk 802.1Q ; puis une ACL étendue interdisant au VLAN Commercial de joindre Admin, et la port security limitant chaque port d&#39;accès à une adresse MAC.</li><li>Labo 3 : quatre sites distants en boucle série, routés successivement en statique, en RIPv2 et en OSPF zone unique.</li><li>Labo 4 : découpage VLSM de 172.25.0.0/16 entre trois VLAN de tailles différentes, routage inter-VLAN sur commutateur multicouche (SVI) et DHCP.</li><li>Labo 5 : un /24 redécoupé par VLSM, trois serveurs applicatifs, une politique de sécurité traduite en ACL étendues appliquées au plus près de la source, ports inutilisés désactivés, DHCP snooping et inspection ARP dynamique.</li><li>Labo 6 : un siège de huit segments (voix, invités, IT/SOC, comptabilité, caméras, serveurs, RH, direction), un commutateur cœur multicouche avec relais DHCP, des trunks limités aux VLAN nécessaires, un VLAN voix sur des ports partagés, et deux agences reliées par liaisons WAN série en OSPF.</li></ul></div></section>
     <div class="case-figures"><figure class="case-figure">
     <img src="../../../assets/img/projects/net-acl-validated.png" width="1346" height="395" alt="Packet Tracer : trois VLAN (Admin, IT, Commercial) derrière un commutateur et un routeur 2911, avec la note « Tout est OK ! Commercial ne peut pas communiquer avec admin »" loading="lazy">
@@ -100,7 +98,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <p class="footer-name">Rachidi Tchêgoun AGRO</p>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
       <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
     </div>
     <ul class="footer-links">
@@ -109,7 +107,7 @@
       <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
     </ul>
-    <p class="footer-meta muted">Site statique, sans traceur ni cookie · Mis à jour le 2026-11-05</p>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
   </div>
 </footer>
 </body>
