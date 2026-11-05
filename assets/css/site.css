@@ -149,12 +149,11 @@ pre code { background: none; padding: 0; }
 .hero-intro { font-size: var(--step-1); max-width: 40ch; color: var(--ink); }
 .hero-links { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; list-style: none; padding: 0; margin: 1.5rem 0 0; font-size: .95rem; }
 .hero-links li { margin: 0; }
-.hero-portrait { margin: 0; position: relative; justify-self: end; width: min(100%, 360px); }
-.hero-portrait::before { content: ""; position: absolute; inset: 14px -14px -14px 14px; border: 1px solid var(--accent); border-radius: var(--radius); }
-.hero-portrait img { position: relative; border-radius: var(--radius); aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 20%; width: 100%; background: var(--bg-band); }
+.hero-portrait { margin: 0; justify-self: center; width: min(100%, 340px); padding: 8px; border: 1px solid var(--line-strong); border-radius: calc(var(--radius) + 6px); background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 12px 32px -16px rgba(0,0,0,.25); }
+.hero-portrait img { display: block; border-radius: var(--radius); aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 30%; width: 100%; background: var(--bg-band); }
 @media (max-width: 760px) {
   .hero { grid-template-columns: 1fr; padding-top: 2rem; }
-  .hero-portrait { order: -1; justify-self: start; width: min(56vw, 220px); }
+  .hero-portrait { order: -1; justify-self: center; width: min(62vw, 240px); }
 }
 
 /* ---------- principles ---------- */
