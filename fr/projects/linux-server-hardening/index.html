@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Sécuriser un serveur Linux en sept jours · Rachidi AGRO</title>
-  <meta name="description" content="Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai prouvé chaque étape par un test. En novembre 2026, je suis retourné dans le même conteneur pour refaire les vérifications : les captures ci-dessous viennent de cette séance.">
+  <meta name="description" content="Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Sécuriser un serveur Linux en sept jours · Rachidi AGRO">
-  <meta property="og:description" content="Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai prouvé chaque étape par un test. En novembre 2026, je suis retourné dans le même conteneur pour refaire les vérifications : les captures ci-dessous viennent de cette séance.">
+  <meta property="og:description" content="Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.">
   <meta property="og:locale" content="fr_FR">
   <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
   <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/linux-server-hardening/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
     <p class="eyebrow">Sécurité Linux et systèmes</p>
     <h1>Sécuriser un serveur Linux en sept jours</h1>
-    <p class="lead">Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai prouvé chaque étape par un test. En novembre 2026, je suis retourné dans le même conteneur pour refaire les vérifications : les captures ci-dessous viennent de cette séance.</p>
+    <p class="lead">Pendant mon stage, on m&#39;a confié pour une semaine le serveur comptable d&#39;une entreprise fictive. J&#39;ai verrouillé les accès, mis en place des sauvegardes chiffrées, fait en sorte que le service web redémarre seul, et j&#39;ai vérifié chaque étape par un vrai test.</p>
     <dl class="facts">
       <div><dt>Période</dt><dd>25 – 31 août 2026 · 7 jours</dd></div>
       <div><dt>Statut</dt><dd>Terminé · laboratoire de stage</dd></div>
@@ -60,18 +60,72 @@
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problème</h2><div class="case-body"><p>Un serveur fraîchement installé, sans aucune protection. Chaque exigence (accès, séparation des données, sauvegardes, disponibilité, traçabilité) devait être satisfaite et démontrée, pas seulement configurée.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objectif</h2><div class="case-body"><p>Mettre le serveur au niveau du cahier des charges en sept jours, prouver chaque protection par un test, et terminer la semaine par un auto-audit honnête.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Un serveur Ubuntu 24.04 dans un conteneur Docker, sur un réseau Docker isolé, à adresse fixe.</li><li>Trois comptes nominatifs : deux administrateurs avec sudo, un compte de service sans shell interactif. Chacun a sa propre paire de clés ed25519 protégée par une passphrase.</li><li>SSH sur un port non standard, connexion root et authentification par mot de passe désactivées ; UFW refuse tout le trafic entrant sauf SSH depuis le sous-réseau d&#39;administration.</li><li>Une tâche nocturne compresse les données comptables, les chiffre avec GPG (AES-256), supprime l&#39;archive en clair et garde sept jours d&#39;historique.</li><li>Nginx supervisé par supervisord ; historique des connexions disponible avec last et lastlog.</li></ul></div></section>
-    <div class="case-figures"><figure class="case-figure">
-    <img src="../../../assets/img/projects/hardening-access.png" width="1440" height="616" alt="Terminal : réglages sshd (port 2222, root et mots de passe interdits), UFW actif en refus par défaut, et deux tentatives de connexion par mot de passe refusées" loading="lazy">
-    <figcaption>Accès : SSH par clés uniquement, pare-feu en refus par défaut, connexions par mot de passe refusées. Sortie réelle, relancée le 5 novembre 2026 dans le conteneur d&#39;origine du projet.</figcaption>
-  </figure><figure class="case-figure">
-    <img src="../../../assets/img/projects/hardening-backup.png" width="1485" height="301" alt="Terminal : sauvegarde chiffrée créée, puis restaurée dans un dossier temporaire et comparée avec diff : aucune différence" loading="lazy">
-    <figcaption>Sauvegardes : une sauvegarde ne compte qu&#39;une fois restaurée. Sortie réelle, relancée le 5 novembre 2026 dans le conteneur d&#39;origine du projet.</figcaption>
-  </figure><figure class="case-figure">
-    <img src="../../../assets/img/projects/hardening-resil.png" width="1026" height="511" alt="Terminal : tous les processus Nginx tués, supervisord relance un nouveau processus principal avec de nouveaux workers, le site répond HTTP 200" loading="lazy">
-    <figcaption>Résilience : Nginx revient tout seul après un crash. Sortie réelle, relancée le 5 novembre 2026 dans le conteneur d&#39;origine du projet.</figcaption>
+    <div class="case-figures"><figure class="case-output">
+    <pre class="term" tabindex="0"><code><span class="cmd"># sshd -T 2&gt;/dev/null | grep -E &quot;^(port|permitrootlogin|passwordauthentication|pubkeyauthentication) &quot;</span>
+port 2222
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+
+<span class="cmd"># ufw status verbose</span>
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+2222/tcp                   ALLOW IN    192.168.100.0/24          
+
+<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive root@127.0.0.1 true</span>
+Warning: Permanently added &#39;[127.0.0.1]:2222&#39; (ED25519) to the list of known hosts.
+root@127.0.0.1: Permission denied (publickey).
+
+<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive agro@127.0.0.1 true</span>
+agro@127.0.0.1: Permission denied (publickey).
+
+<span class="cmd"># ls -ld /data/comptabilite</span>
+drwxrws--- 2 root comptabilite 4096 Aug 26 09:52 /data/comptabilite</code></pre>
+    <figcaption>Accès : SSH par clés uniquement, pare-feu fermé par défaut, connexions par mot de passe refusées.</figcaption>
+  </figure><figure class="case-output">
+    <pre class="term" tabindex="0"><code><span class="cmd"># /root/scripts/backup.sh &amp;&amp; ls -lh /mnt/backup | tail -n 3</span>
+total 4.0K
+-rw-r--r-- 1 root root 237 Nov  5 17:44 backup_comptabilite_2026-11-05_174402.tar.gz.gpg
+
+<span class="cmd"># rm -rf /tmp/restore &amp;&amp; mkdir /tmp/restore</span>
+
+<span class="cmd"># time (gpg --batch --decrypt --passphrase-file &quot;$PF&quot; /mnt/backup/backup_comptabilite_2026-11-05_174402.tar.gz.gpg | tar -xz -C /tmp/restore)</span>
+real    0m0.185s
+
+<span class="cmd"># diff -r /data/comptabilite /tmp/restore/comptabilite &amp;&amp; echo &quot;Aucune différence : restauration identique aux données&quot;</span>
+Aucune différence : restauration identique aux données</code></pre>
+    <figcaption>Sauvegardes : une sauvegarde ne compte qu&#39;une fois restaurée.</figcaption>
+  </figure><figure class="case-output">
+    <pre class="term" tabindex="0"><code><span class="cmd"># supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
+nginx                            RUNNING   pid 343, uptime 0:00:03
+343 nginx: master process /usr/sbin/nginx -g daemon off;
+344 nginx: worker process
+345 nginx: worker process
+346 nginx: worker process
+347 nginx: worker process
+
+<span class="cmd"># pkill -9 -x nginx; sleep 1; supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
+nginx                            STARTING  
+365 nginx: master process /usr/sbin/nginx -g daemon off;
+366 nginx: worker process
+367 nginx: worker process
+368 nginx: worker process
+369 nginx: worker process
+
+<span class="cmd"># curl -s -o /dev/null -w &quot;HTTP %{http_code}\n&quot; http://127.0.0.1/</span>
+HTTP 200
+
+<span class="cmd"># cat /var/log/nginx-supervisor-err.log | wc -l</span>
+0</code></pre>
+    <figcaption>Résilience : Nginx revient tout seul après un crash.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Jour 1 : réseau isolé, comptes nominatifs, SSH par clés uniquement et pare-feu. Les clés publiques ont été déposées avec docker cp, car l&#39;authentification par mot de passe n&#39;a jamais été activée, même temporairement.</li><li>Jours 2–3 : dossier comptable dédié avec le bit SGID ; script de sauvegarde chiffrée avec rotation sur sept jours, puis test de restauration complet.</li><li>Jours 4–5 : redémarrage automatique du service web et traçabilité des connexions.</li><li>Jour 6 : incident non annoncé (un client affirme avoir reçu une facture jamais commandée), investigué sans connaître la réponse.</li><li>Jour 7 : auto-audit de chaque exigence et rapport de mission.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>UFW refusait de démarrer : un conteneur standard n&#39;a pas les capacités noyau nécessaires. J&#39;ai figé le travail avec docker commit et recréé le conteneur avec NET_ADMIN et NET_RAW, sans rien perdre.</li><li>Pas de systemd ni de journald dans le conteneur, donc pas les outils habituels de redémarrage automatique et de journaux. J&#39;ai utilisé supervisord pour le service, et last/lastlog pour l&#39;historique des connexions, qui fonctionnent sans systemd.</li><li>Revenir en novembre m&#39;a appris deux choses de plus. Après le redémarrage du conteneur, le pare-feu et les services ne sont pas repartis seuls : un conteneur n&#39;a pas de système d&#39;init pour les lancer. Et tuer seulement le processus principal de Nginx laisse ses workers occuper le port 80 : le processus relancé ne peut plus s&#39;y attacher, alors que le site semble encore répondre. Un vrai test arrête tous les processus Nginx, et la vraie correction est un script de démarrage.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">Ce qui a coincé, et comment je l’ai résolu</h2><div class="case-body"><ul><li>UFW refusait de démarrer : un conteneur standard n&#39;a pas les capacités noyau nécessaires. J&#39;ai figé le travail avec docker commit et recréé le conteneur avec NET_ADMIN et NET_RAW, sans rien perdre.</li><li>Pas de systemd ni de journald dans le conteneur, donc pas les outils habituels de redémarrage automatique et de journaux. J&#39;ai utilisé supervisord pour le service, et last/lastlog pour l&#39;historique des connexions, qui fonctionnent sans systemd.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
   <h2 id="verification-h">Comment je l’ai vérifié</h2>
   <div class="case-body">
@@ -79,7 +133,7 @@
     <div class="table-scroll" role="region" aria-label="Comment je l’ai vérifié" tabindex="0">
     <table class="ledger">
       <thead><tr><th scope="col">Ce que je voulais prouver</th><th scope="col">Le test</th><th scope="col">Ce que j’ai observé</th></tr></thead>
-      <tbody><tr><th scope="row">root ne peut pas se connecter en SSH</th><td>Tentative de connexion root</td><td><span class="ok-dot" aria-hidden="true"></span>Refusée</td></tr><tr><th scope="row">Clés uniquement, pas de mot de passe</th><td>Connexion par clé, puis par mot de passe</td><td><span class="ok-dot" aria-hidden="true"></span>Clé acceptée · mot de passe refusé</td></tr><tr><th scope="row">Les sauvegardes se restaurent dans le RTO</th><td>Restauration de la dernière archive chiffrée dans un dossier temporaire, puis comparaison fichier par fichier avec diff</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune différence · déchiffré et restauré en 0,19 s (petit jeu de test ; quelques minutes pendant la mission)</td></tr><tr><th scope="row">Le service web se rétablit seul</th><td>Arrêt brutal de tous les processus Nginx d&#39;un coup (pkill -9)</td><td><span class="ok-dot" aria-hidden="true"></span>Nouveau processus principal en moins d&#39;une seconde, le site répond HTTP 200, aucune erreur dans les journaux</td></tr><tr><th scope="row">La facture suspecte ne vient pas du serveur</th><td>Revue des connexions admin, tâches planifiées, journaux Nginx et dossier comptable</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune trace de compromission ; le serveur n&#39;a aucune fonction de facturation. Hypothèse : hameçonnage visant le client</td></tr></tbody>
+      <tbody><tr><th scope="row">root ne peut pas se connecter en SSH</th><td>Tentative de connexion root</td><td><span class="ok-dot" aria-hidden="true"></span>Refusée</td></tr><tr><th scope="row">Clés uniquement, pas de mot de passe</th><td>Connexion par clé, puis par mot de passe</td><td><span class="ok-dot" aria-hidden="true"></span>Clé acceptée · mot de passe refusé</td></tr><tr><th scope="row">Les sauvegardes se restaurent dans le RTO</th><td>Restauration de la dernière archive chiffrée dans un dossier à part, puis comparaison fichier par fichier avec diff</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune différence entre la copie restaurée et les données réelles</td></tr><tr><th scope="row">Le service web se rétablit seul</th><td>Arrêt brutal des processus Nginx avec kill -9</td><td><span class="ok-dot" aria-hidden="true"></span>Relancé automatiquement par supervisord en moins d&#39;une seconde, site de nouveau en ligne</td></tr><tr><th scope="row">La facture suspecte ne vient pas du serveur</th><td>Revue des connexions admin, tâches planifiées, journaux Nginx et dossier comptable</td><td><span class="ok-dot" aria-hidden="true"></span>Aucune trace de compromission ; le serveur n&#39;a aucune fonction de facturation. Hypothèse : hameçonnage visant le client</td></tr></tbody>
     </table>
     </div>
   </div>

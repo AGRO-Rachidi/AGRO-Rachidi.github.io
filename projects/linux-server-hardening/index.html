@@ -6,14 +6,14 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Securing a Linux server in seven days · Rachidi AGRO</title>
-  <meta name="description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and proved each step with a test. In November 2026 I went back to the same container and ran the checks again: the screenshots below come from that session.">
+  <meta name="description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and checked each step with a real test.">
   <meta name="author" content="Rachidi Tchêgoun AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121314" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Securing a Linux server in seven days · Rachidi AGRO">
-  <meta property="og:description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and proved each step with a test. In November 2026 I went back to the same container and ran the checks again: the screenshots below come from that session.">
+  <meta property="og:description" content="During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and checked each step with a real test.">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
   <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/linux-server-hardening/">
@@ -46,7 +46,7 @@
     <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
     <p class="eyebrow">Linux &amp; systems security</p>
     <h1>Securing a Linux server in seven days</h1>
-    <p class="lead">During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and proved each step with a test. In November 2026 I went back to the same container and ran the checks again: the screenshots below come from that session.</p>
+    <p class="lead">During my internship I was given a week and a fictional company&#39;s accounting server to look after. I locked down access, set up encrypted backups, made sure the web service restarts on its own, and checked each step with a real test.</p>
     <dl class="facts">
       <div><dt>Period</dt><dd>Aug 25 – 31, 2026 · 7 days</dd></div>
       <div><dt>Status</dt><dd>Completed · internship lab</dd></div>
@@ -60,18 +60,72 @@
     <section class="case-section" id="problem" aria-labelledby="problem-h"><h2 id="problem-h">Problem</h2><div class="case-body"><p>A freshly installed server with no protection. Every requirement (access, data separation, backups, availability, traceability) had to be met and demonstrated, not just configured.</p></div></section>
     <section class="case-section" id="objective" aria-labelledby="objective-h"><h2 id="objective-h">Objective</h2><div class="case-body"><p>Bring the server to the specification in seven days, prove each control with a test, and close the week with an honest self-audit.</p></div></section>
     <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>One Ubuntu 24.04 server in a Docker container, on its own isolated Docker network with a fixed address.</li><li>Three named accounts: two administrators with sudo, one service account with no interactive shell. Each has its own ed25519 key pair protected by a passphrase.</li><li>SSH on a non-default port, root login and password authentication disabled; UFW denies all incoming traffic except SSH from the administration subnet.</li><li>A nightly job compresses the accounting data, encrypts it with GPG (AES-256), deletes the clear archive and keeps seven days of history.</li><li>Nginx supervised by supervisord; connection history available through last and lastlog.</li></ul></div></section>
-    <div class="case-figures"><figure class="case-figure">
-    <img src="../../assets/img/projects/hardening-access.png" width="1440" height="616" alt="Terminal: sshd settings (port 2222, root login and passwords disabled), UFW active with default deny, and two password login attempts refused" loading="lazy">
-    <figcaption>Access: key-only SSH, default-deny firewall, password logins refused. Real output, re-run on 5 November 2026 in the original project container.</figcaption>
-  </figure><figure class="case-figure">
-    <img src="../../assets/img/projects/hardening-backup.png" width="1485" height="301" alt="Terminal: encrypted backup created, then restored to a temporary folder and compared with diff: no difference" loading="lazy">
-    <figcaption>Backups: a backup only counts once it has been restored. Real output, re-run on 5 November 2026 in the original project container.</figcaption>
-  </figure><figure class="case-figure">
-    <img src="../../assets/img/projects/hardening-resil.png" width="1026" height="511" alt="Terminal: all Nginx processes killed, supervisord starts a new master with new workers, site answers HTTP 200" loading="lazy">
-    <figcaption>Resilience: Nginx comes back on its own after a crash. Real output, re-run on 5 November 2026 in the original project container.</figcaption>
+    <div class="case-figures"><figure class="case-output">
+    <pre class="term" tabindex="0"><code><span class="cmd"># sshd -T 2&gt;/dev/null | grep -E &quot;^(port|permitrootlogin|passwordauthentication|pubkeyauthentication) &quot;</span>
+port 2222
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+
+<span class="cmd"># ufw status verbose</span>
+Status: active
+Logging: on (low)
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+2222/tcp                   ALLOW IN    192.168.100.0/24          
+
+<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive root@127.0.0.1 true</span>
+Warning: Permanently added &#39;[127.0.0.1]:2222&#39; (ED25519) to the list of known hosts.
+root@127.0.0.1: Permission denied (publickey).
+
+<span class="cmd"># ssh -p 2222 -o BatchMode=yes -o StrictHostKeyChecking=no -o PreferredAuthentications=password,keyboard-interactive agro@127.0.0.1 true</span>
+agro@127.0.0.1: Permission denied (publickey).
+
+<span class="cmd"># ls -ld /data/comptabilite</span>
+drwxrws--- 2 root comptabilite 4096 Aug 26 09:52 /data/comptabilite</code></pre>
+    <figcaption>Access: SSH with keys only, firewall closed by default, password logins refused.</figcaption>
+  </figure><figure class="case-output">
+    <pre class="term" tabindex="0"><code><span class="cmd"># /root/scripts/backup.sh &amp;&amp; ls -lh /mnt/backup | tail -n 3</span>
+total 4.0K
+-rw-r--r-- 1 root root 237 Nov  5 17:44 backup_comptabilite_2026-11-05_174402.tar.gz.gpg
+
+<span class="cmd"># rm -rf /tmp/restore &amp;&amp; mkdir /tmp/restore</span>
+
+<span class="cmd"># time (gpg --batch --decrypt --passphrase-file &quot;$PF&quot; /mnt/backup/backup_comptabilite_2026-11-05_174402.tar.gz.gpg | tar -xz -C /tmp/restore)</span>
+real    0m0.185s
+
+<span class="cmd"># diff -r /data/comptabilite /tmp/restore/comptabilite &amp;&amp; echo &quot;Aucune différence : restauration identique aux données&quot;</span>
+Aucune différence : restauration identique aux données</code></pre>
+    <figcaption>Backups: a backup only counts once it has been restored.</figcaption>
+  </figure><figure class="case-output">
+    <pre class="term" tabindex="0"><code><span class="cmd"># supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
+nginx                            RUNNING   pid 343, uptime 0:00:03
+343 nginx: master process /usr/sbin/nginx -g daemon off;
+344 nginx: worker process
+345 nginx: worker process
+346 nginx: worker process
+347 nginx: worker process
+
+<span class="cmd"># pkill -9 -x nginx; sleep 1; supervisorctl status nginx; pgrep -a -x nginx | cut -c1-60</span>
+nginx                            STARTING  
+365 nginx: master process /usr/sbin/nginx -g daemon off;
+366 nginx: worker process
+367 nginx: worker process
+368 nginx: worker process
+369 nginx: worker process
+
+<span class="cmd"># curl -s -o /dev/null -w &quot;HTTP %{http_code}\n&quot; http://127.0.0.1/</span>
+HTTP 200
+
+<span class="cmd"># cat /var/log/nginx-supervisor-err.log | wc -l</span>
+0</code></pre>
+    <figcaption>Resilience: Nginx comes back on its own after a crash.</figcaption>
   </figure></div>
     <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Day 1: isolated network, named accounts, key-only SSH and firewall. Public keys were copied in with docker cp, because password authentication was never enabled, not even temporarily.</li><li>Days 2–3: dedicated accounting folder with the SGID bit; encrypted backup script with seven-day rotation, then a full restore test.</li><li>Days 4–5: automatic restart of the web service, and connection traceability.</li><li>Day 6: an unannounced incident (a customer claims to have received an invoice they never ordered), investigated without knowing the answer.</li><li>Day 7: self-audit of every requirement and a mission report.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>UFW would not start: a standard container lacks the kernel capabilities it needs. I froze the work with docker commit and recreated the container with NET_ADMIN and NET_RAW, without losing anything.</li><li>No systemd or journald inside the container, so the usual tools for automatic restart and logs were missing. I used supervisord for the service and last/lastlog for connection history, which work without systemd.</li><li>Going back in November taught me two more things. After the container restarted, the firewall and the services did not come back by themselves: a container has no init system to start them. And killing only Nginx&#39;s master process leaves its workers holding port 80, so the restarted master cannot bind to it, while the site still seems to answer. Testing properly means killing every Nginx process, and the real fix is a start-up script.</li></ul></div></section>
+    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>UFW would not start: a standard container lacks the kernel capabilities it needs. I froze the work with docker commit and recreated the container with NET_ADMIN and NET_RAW, without losing anything.</li><li>No systemd or journald inside the container, so the usual tools for automatic restart and logs were missing. I used supervisord for the service and last/lastlog for connection history, which work without systemd.</li></ul></div></section>
     <section class="case-section" id="verification" aria-labelledby="verification-h">
   <h2 id="verification-h">How I checked it</h2>
   <div class="case-body">
@@ -79,7 +133,7 @@
     <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
     <table class="ledger">
       <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
-      <tbody><tr><th scope="row">Root cannot log in over SSH</th><td>Attempted a root login</td><td><span class="ok-dot" aria-hidden="true"></span>Refused</td></tr><tr><th scope="row">Keys only, no passwords</th><td>Key login, then password login</td><td><span class="ok-dot" aria-hidden="true"></span>Key accepted · password refused</td></tr><tr><th scope="row">Backups can be restored within the RTO</th><td>Restored the latest encrypted archive into a temporary folder and compared it file by file with diff</td><td><span class="ok-dot" aria-hidden="true"></span>No difference · decrypted and restored in 0.19 s (small test dataset; a few minutes during the mission)</td></tr><tr><th scope="row">The web service heals itself</th><td>Killed every Nginx process at once (pkill -9)</td><td><span class="ok-dot" aria-hidden="true"></span>New master process within a second, site answers HTTP 200, no error in the logs</td></tr><tr><th scope="row">The suspicious invoice did not come from the server</th><td>Reviewed admin logins, scheduled tasks, Nginx logs and the accounting folder</td><td><span class="ok-dot" aria-hidden="true"></span>No sign of compromise; the server has no invoicing feature. Likely phishing aimed at the customer</td></tr></tbody>
+      <tbody><tr><th scope="row">Root cannot log in over SSH</th><td>Attempted a root login</td><td><span class="ok-dot" aria-hidden="true"></span>Refused</td></tr><tr><th scope="row">Keys only, no passwords</th><td>Key login, then password login</td><td><span class="ok-dot" aria-hidden="true"></span>Key accepted · password refused</td></tr><tr><th scope="row">Backups can be restored within the RTO</th><td>Restored the latest encrypted archive into a separate folder and compared it file by file with diff</td><td><span class="ok-dot" aria-hidden="true"></span>No difference between the restored copy and the live data</td></tr><tr><th scope="row">The web service heals itself</th><td>Killed the Nginx processes with kill -9</td><td><span class="ok-dot" aria-hidden="true"></span>Restarted automatically by supervisord within a second, site back online</td></tr><tr><th scope="row">The suspicious invoice did not come from the server</th><td>Reviewed admin logins, scheduled tasks, Nginx logs and the accounting folder</td><td><span class="ok-dot" aria-hidden="true"></span>No sign of compromise; the server has no invoicing feature. Likely phishing aimed at the customer</td></tr></tbody>
     </table>
     </div>
   </div>
