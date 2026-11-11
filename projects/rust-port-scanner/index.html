@@ -20,7 +20,7 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/rust-port-scanner/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css?v=6fb7ff3bd7">
+  <link rel="stylesheet" href="../../assets/css/site.css?v=0273935435">
   <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
@@ -55,14 +55,7 @@
     <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository: the three versions</a></div>
   </header>
   <div class="wrap case-content">
-    <section class="case-section" id="context" aria-labelledby="context-h"><h2 id="context-h">Context</h2><div class="case-body"><p>A personal project to learn Rust on a security-flavoured problem, built while I was learning ownership, borrowing and concurrency.</p><p>With a 10 ms connection timeout, testing 65,535 ports one by one can take hours. The question was how to go faster without wasting the machine&#39;s resources.</p><p>Build a working scanner, then understand why each improvement works and what it costs.</p></div></section>
-    <section class="case-section" id="architecture" aria-labelledby="architecture-h"><h2 id="architecture-h">Architecture</h2><div class="case-body"><ul><li>Version 1: a sequential loop with connect_timeout.</li><li>Version 2: ports split across OS threads, results sent back over an mpsc channel. The total time then depends on the busiest thread.</li><li>Version 3: lightweight async tasks with Tokio, and a semaphore capping simultaneous connections at 5,000 so the system and the network are not flooded.</li></ul></div></section>
-    
-    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Wrote the three versions in sequence, keeping the earlier ones as comments before turning them back into standalone files for the repository.</li><li>Documented the cost of each approach: about 2 MB of stack per OS thread, plus creation and scheduling overhead, against much lighter async tasks.</li></ul></div></section>
-    <section class="case-section" id="challenges" aria-labelledby="challenges-h"><h2 id="challenges-h">What went wrong, and how I fixed it</h2><div class="case-body"><ul><li>Version 2 was fast (under a second with 1,000 threads, in my tests) but spending 1,000 threads on a few seconds of work is a poor trade. Accepting that a working solution was still the wrong one is what led to version 3.</li></ul></div></section>
-    <section class="case-section" id="verification" aria-labelledby="verification-h">
-  <h2 id="verification-h">How I checked it</h2>
-  <div class="case-body">
+    <section class="case-section" id="project" aria-labelledby="project-h"><h2 id="project-h">The project</h2><div class="case-body"><p>I wanted to learn Rust on a security-related problem while I was getting to grips with ownership, borrowing and concurrency. The starting point was simple: with a 10 ms timeout per connection, testing all 65,535 ports one by one can take hours. I wanted to go faster without wasting the machine&#39;s resources, and above all to understand what each improvement costs.</p><ul><li>Version 1: a sequential loop with connect_timeout.</li><li>Version 2: ports split across OS threads, results sent back over an mpsc channel. The total time then depends on the busiest thread.</li><li>Version 3: lightweight async tasks with Tokio, and a semaphore capping simultaneous connections at 5,000 so the system and the network are not flooded.</li></ul></div></section><section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did, and what went wrong</h2><div class="case-body"><ul><li>Wrote the three versions in sequence, keeping the earlier ones as comments before turning them back into standalone files for the repository.</li><li>Documented the cost of each approach: about 2 MB of stack per OS thread, plus creation and scheduling overhead, against much lighter async tasks.</li></ul><h3 class="case-sub">What went wrong</h3><ul><li>Version 2 was fast (under a second with 1,000 threads, in my tests) but spending 1,000 threads on a few seconds of work is a poor trade. Accepting that a working solution was still the wrong one is what led to version 3.</li></ul></div></section><section class="case-section" id="checked" aria-labelledby="checked-h"><h2 id="checked-h">How I checked it</h2><div class="case-body">
     <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
     <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
     <table class="ledger">
@@ -70,15 +63,10 @@
       <tbody><tr><th scope="row">Async version is faster and lighter</th><td>Timed full-range scans of each version on my machine</td><td><span class="ok-dot" aria-hidden="true"></span>About 0.13 s for 65,535 ports with 5,000 tasks (informal measurement)</td></tr></tbody>
     </table>
     </div>
-  </div>
-</section>
-    <section class="case-section" id="results" aria-labelledby="results-h"><h2 id="results-h">Results</h2><div class="case-body"><ul><li>Three working versions and a written comparison of threads with channels versus async tasks.</li><li>A habit I kept: question a working solution when its cost is out of proportion.</li></ul></div></section>
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>TCP connect scan only; no service detection.</li><li>Timings are informal: I didn&#39;t record the target or the network conditions, so they only give orders of magnitude.</li><li>To be used only on systems I own or am authorised to test.</li></ul></div></section>
-    <section class="case-section" id="next" aria-labelledby="next-h"><h2 id="next-h">What I would improve</h2><div class="case-body"><ul><li>A reproducible benchmark (fixed target, repeated runs, median)</li><li>Command-line arguments instead of interactive input</li><li>Basic banner grabbing</li></ul></div></section>
-    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer">Repository: the three versions</a> <span class="muted small">github.com/AGRO-Rachidi/port-scanner-rust</span></li></ul></div></section>
+  <h3 class="case-sub">Result</h3><ul><li>Three working versions and a written comparison of threads with channels versus async tasks.</li><li>A habit I kept: question a working solution when its cost is out of proportion.</li></ul></div></section><section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limits and next steps</h2><div class="case-body"><ul><li>TCP connect scan only; no service detection.</li><li>Timings are informal: I didn&#39;t record the target or the network conditions, so they only give orders of magnitude.</li><li>To be used only on systems I own or am authorised to test.</li></ul><h3 class="case-sub">What I would do next</h3><ul><li>A reproducible benchmark (fixed target, repeated runs, median)</li><li>Command-line arguments instead of interactive input</li><li>Basic banner grabbing</li></ul></div></section><section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Code and documents</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/port-scanner-rust" rel="noopener noreferrer">Repository: the three versions</a> <span class="muted small">github.com/AGRO-Rachidi/port-scanner-rust</span></li></ul></div></section>
   </div>
   <nav class="wrap pager" aria-label="More projects">
-    <a class="pager-prev" href="../../projects/enterprise-network-labs/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous</span><span>Enterprise network labs: from VLANs to a secured multi-site design</span></a>
+    <a class="pager-prev" href="../../projects/cassandra-vs-postgresql/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous</span><span>Cassandra in practice: a 3-node cluster, a failure test and ten years of data</span></a>
     <a class="pager-next" href="../../projects/python-for-security/"><span class="muted small">Next <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Python for security: a learning log</span></a>
   </nav>
 </article>
@@ -87,7 +75,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Tchêgoun Rachidi AGRO</p>
-      <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
+      <p class="muted">Cybersecurity · Linux systems · Networking</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

@@ -410,3 +410,12 @@ a:hover { color: var(--accent); }
 .tag, .tags li { border-color: rgba(61,139,255,.35); }
 .case-body li::marker { color: var(--blue); }
 .back:hover, .more:hover { color: var(--blue-soft); }
+
+/* V2 : vignettes sans code, outils hiérarchisés, sous-titres d'études de cas */
+.thumb-label { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem; background: var(--surface-2); color: var(--ink-soft); font-family: var(--font-mono); font-size: .8rem; letter-spacing: .03em; text-align: center; padding: 1rem; }
+.thumb-label .tool-icon { width: 48px; height: 48px; color: var(--blue-soft); }
+.thumb-label::after { display: none; }
+.toolbox { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.tools-also { margin: 1.1rem 0 0; color: var(--ink-soft); font-size: .95rem; }
+.case-sub { font-family: var(--font-body); font-size: .95rem; font-weight: 650; color: var(--blue-soft); margin: 1.4rem 0 .5rem; }
+.case-body .case-figures { padding: 1rem 0 0; border: 0; }

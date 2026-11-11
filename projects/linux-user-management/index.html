@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'self' https://api.web3forms.com">
+  <meta name="referrer" content="no-referrer">
+  <title>Linux account management from a CSV file, in Bash · Rachidi AGRO</title>
+  <meta name="description" content="A Bash script that reads employees from a CSV file, creates the department groups and the user accounts with random passwords, and can be run again without creating duplicates. Published with a small system health-check script.">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0a0f1d">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Linux account management from a CSV file, in Bash · Rachidi AGRO">
+  <meta property="og:description" content="A Bash script that reads employees from a CSV file, creates the department groups and the user accounts with random passwords, and can be run again without creating duplicates. Published with a small system health-check script.">
+  <meta property="og:locale" content="en_US">
+  <link rel="canonical" href="https://agro-rachidi.github.io/projects/linux-user-management/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/linux-user-management/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/linux-user-management/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/projects/linux-user-management/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/css/site.css?v=0273935435">
+  <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../" aria-label="Home"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <ul><li><a href="../../projects/" aria-current="page">Projects</a></li><li><a href="../../skills/">Skills</a></li><li><a href="../../background/">Background</a></li><li><a href="../../about/">About</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../fr/projects/linux-user-management/" hreflang="fr" lang="fr" title="Version française">FR</a>
+      <button class="theme-toggle" type="button" aria-label="Switch light/dark theme" title="Switch light/dark theme"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
+    <p class="eyebrow">Linux administration · Bash</p>
+    <h1>Linux account management from a CSV file, in Bash</h1>
+    <p class="lead">A Bash script that reads employees from a CSV file, creates the department groups and the user accounts with random passwords, and can be run again without creating duplicates. Published with a small system health-check script.</p>
+    <dl class="facts">
+      <div><dt>Period</dt><dd>August 2026</dd></div>
+      <div><dt>Status</dt><dd>Completed · personal project, during my internship</dd></div>
+      <div><dt>Type</dt><dd>Personal project</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Bash</li><li class="tag">useradd / groupadd</li><li class="tag">chpasswd</li><li class="tag">Ubuntu 24.04</li><li class="tag">Docker</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-user-management-bash" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="project" aria-labelledby="project-h"><h2 id="project-h">The project</h2><div class="case-body"><p>While practising Linux administration in August 2026, I wanted to stop creating accounts by hand. I documented the scripts in a PDF report at the time; the original files were later lost, so the published code is copied from that report. One line missing from the printed listing (the loop that reads the CSV) was restored and is marked with a comment.</p></div></section><section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did, and what went wrong</h2><div class="case-body"><ul><li>For each CSV line (first name, last name, department): create the department group if it doesn&#39;t exist, then the user first.last with a home directory, its own primary group and the department as a secondary group.</li><li>Generate a random 12-character password, set it with chpasswd and record it in credentials.txt.</li><li>health_check.sh prints the date, load average, memory, disk usage and the five processes using the most memory.</li></ul></div></section><section class="case-section" id="checked" aria-labelledby="checked-h"><h2 id="checked-h">How I checked it</h2><div class="case-body">
+    <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
+    <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
+      <tbody><tr><th scope="row">The first run creates the accounts</th><td>Ran on Ubuntu 24.04 in a throwaway Docker container with the sample CSV</td><td><span class="ok-dot" aria-hidden="true"></span>2 groups and 4 users created</td></tr><tr><th scope="row">The script can be run again</th><td>Second run with the same CSV</td><td><span class="ok-dot" aria-hidden="true"></span>Everything reported as already existing, nothing duplicated</td></tr></tbody>
+    </table>
+    </div>
+  </div></section><section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limits and next steps</h2><div class="case-body"><ul><li>Passwords are written in clear text to credentials.txt. On a real system they should be handed over another way and changed at first login (chage -d 0).</li><li>No validation of the CSV content (empty fields, spaces, accents in names), and no dry-run mode.</li></ul></div></section><section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Code and documents</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-user-management-bash" rel="noopener noreferrer">Repository</a> <span class="muted small">github.com/AGRO-Rachidi/linux-user-management-bash</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="More projects">
+    <a class="pager-prev" href="../../projects/department-file-server/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous</span><span>A department-isolated file server, from Unix groups to Samba</span></a>
+    <a class="pager-next" href="../../projects/enterprise-network-labs/"><span class="muted small">Next <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Enterprise network labs: from VLANs to a secured multi-site design</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
+      <p class="muted">Cybersecurity · Linux systems · Networking</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../assets/docs/CV_AGRO_EN.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
+  </div>
+</footer>
+</body>
+</html>

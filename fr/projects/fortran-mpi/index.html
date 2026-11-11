@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'self' https://api.web3forms.com">
   <meta name="referrer" content="no-referrer">
-  <title>Programmation parallèle en Fortran avec MPI · Rachidi AGRO</title>
-  <meta name="description" content="Du premier MPI_Send à l&#39;équilibrage dynamique de charge : échanges point à point, Scatter/Gather sur des matrices, et un schéma maître–esclaves qui confie 150 problèmes résolus par la méthode de Newton au premier processus libre.">
+  <title>HPC : Branch and Bound distribué en Fortran et MPI · Rachidi AGRO</title>
+  <meta name="description" content="Avec deux camarades, nous avons écrit un solveur exact pour un problème du voyageur de commerce asymétrique (une tournée au départ de Cotonou sur 24 villes d&#39;Afrique de l&#39;Ouest) : un Branch and Bound parallélisé selon un modèle maître–travailleur dynamique en Fortran 2008 et MPI, vérifié par Held-Karp et mesuré avec les lois d&#39;Amdahl et de Gustafson.">
   <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Programmation parallèle en Fortran avec MPI · Rachidi AGRO">
-  <meta property="og:description" content="Du premier MPI_Send à l&#39;équilibrage dynamique de charge : échanges point à point, Scatter/Gather sur des matrices, et un schéma maître–esclaves qui confie 150 problèmes résolus par la méthode de Newton au premier processus libre.">
+  <meta property="og:title" content="HPC : Branch and Bound distribué en Fortran et MPI · Rachidi AGRO">
+  <meta property="og:description" content="Avec deux camarades, nous avons écrit un solveur exact pour un problème du voyageur de commerce asymétrique (une tournée au départ de Cotonou sur 24 villes d&#39;Afrique de l&#39;Ouest) : un Branch and Bound parallélisé selon un modèle maître–travailleur dynamique en Fortran 2008 et MPI, vérifié par Held-Karp et mesuré avec les lois d&#39;Amdahl et de Gustafson.">
   <meta property="og:locale" content="fr_FR">
   <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/fortran-mpi/">
   <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/fortran-mpi/">
@@ -20,7 +20,7 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/fortran-mpi/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../../assets/css/site.css?v=6fb7ff3bd7">
+  <link rel="stylesheet" href="../../../assets/css/site.css?v=0273935435">
   <script src="../../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
@@ -43,31 +43,30 @@
 <article class="case">
   <header class="wrap case-head">
     <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
-    <p class="eyebrow">HPC · calcul parallèle</p>
-    <h1>Programmation parallèle en Fortran avec MPI</h1>
-    <p class="lead">Du premier MPI_Send à l&#39;équilibrage dynamique de charge : échanges point à point, Scatter/Gather sur des matrices, et un schéma maître–esclaves qui confie 150 problèmes résolus par la méthode de Newton au premier processus libre.</p>
+    <p class="eyebrow">HPC · optimisation · calcul parallèle</p>
+    <h1>HPC : Branch and Bound distribué en Fortran et MPI</h1>
+    <p class="lead">Avec deux camarades, nous avons écrit un solveur exact pour un problème du voyageur de commerce asymétrique (une tournée au départ de Cotonou sur 24 villes d&#39;Afrique de l&#39;Ouest) : un Branch and Bound parallélisé selon un modèle maître–travailleur dynamique en Fortran 2008 et MPI, vérifié par Held-Karp et mesuré avec les lois d&#39;Amdahl et de Gustafson.</p>
     <dl class="facts">
-      <div><dt>Période</dt><dd>Septembre – octobre 2026</dd></div>
-      <div><dt>Statut</dt><dd>Travaux de cours · programmation avancée</dd></div>
+      <div><dt>Période</dt><dd>Année universitaire 2026-2027</dd></div>
+      <div><dt>Statut</dt><dd>Projet de groupe (3 étudiants) · module Programmation avancée et MPI</dd></div>
       <div><dt>Type</dt><dd>Projet académique</dd></div>
     </dl>
-    <ul class="tags" aria-label="Technologies"><li class="tag">Fortran 2008</li><li class="tag">MPI (mpi_f08)</li><li class="tag">Open MPI</li><li class="tag">LAPACK</li></ul>
-    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt</a></div>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Fortran 2008</li><li class="tag">MPI (mpi_f08)</li><li class="tag">Open MPI</li><li class="tag">Slurm</li><li class="tag">Python (analysis)</li><li class="tag">LaTeX</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt</a><a class="btn" href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi/blob/main/rapport/Rapport_ILRO_PA.pdf" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Rapport (PDF)</a><a class="btn" href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Exercices MPI du cours</a></div>
   </header>
   <div class="wrap case-content">
-    
-    
-    
-    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait</h2><div class="case-body"><ul><li>Bases de Fortran : allocation dynamique contrôlée, opérations matricielles, inversion avec LAPACK (dgetrf/dgetri).</li><li>Point à point : premiers programmes MPI, rangs et taille, et échange de matrices entre deux rangs avec MPI_Send et MPI_Recv.</li><li>Collectives : MPI_Scatter et MPI_Gather pour élever au carré une matrice par esclave.</li><li>Maître–esclaves : le maître envoie la tâche suivante au premier esclave qui répond (MPI_ANY_SOURCE) et arrête les esclaves inactifs avec une étiquette dédiée.</li></ul></div></section>
-    
-    
-    
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Ce que ça ne fait pas (encore)</h2><div class="case-body"><ul><li>Exercices de cours : la clarté prime sur la performance ; aucune mesure d&#39;accélération n&#39;est revendiquée.</li></ul></div></section>
-    
-    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Preuves</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer">Dépôt</a> <span class="muted small">github.com/AGRO-Rachidi/hpc-fortran-mpi</span></li></ul></div></section>
+    <section class="case-section" id="project" aria-labelledby="project-h"><h2 id="project-h">Le projet</h2><div class="case-body"><p>Projet de fin du module Programmation avancée et MPI à l&#39;ENSGMM, réalisé à trois (AGRO Rachidi, BOUKARI Haboud, GNONLONFOUN Octave) sous la supervision du Dr Bruno S. DANDOGBESSI. Le sujet : résoudre exactement un problème de tournée, paralléliser la recherche avec MPI et auditer ses performances avec les outils vus en cours. Les exercices MPI du cours sont liés plus bas.</p></div></section><section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait, et ce qui a coincé</h2><div class="case-body"><ul><li>Modèle : 24 villes repérées par leurs coordonnées, coûts asymétriques, Cotonou comme dépôt.</li><li>Cœur séquentiel : Branch and Bound en profondeur, avec borne inférieure et tournée de départ par le plus proche voisin.</li><li>Version parallèle : le maître découpe l&#39;arbre en sous-arbres triés par borne et les distribue à la demande. Les travailleurs signalent les meilleures tournées par MPI_Isend ; le maître les détecte avec MPI_Iprobe, relaie la nouvelle borne et élague sa file.</li><li>Vérification : un programme Held-Karp écrit séparément, pour contrôler l&#39;optimum.</li><li>Mesures : passage à l&#39;échelle forte et faible, trois répétitions par point, analysées avec l&#39;accélération, l&#39;efficacité, les lois d&#39;Amdahl et de Gustafson et la métrique de Karp-Flatt.</li></ul></div></section><section class="case-section" id="checked" aria-labelledby="checked-h"><h2 id="checked-h">Comment je l’ai vérifié</h2><div class="case-body">
+    <p class="muted small">Ce que je voulais prouver, le test que j’ai fait, et ce que j’ai réellement observé.</p>
+    <div class="table-scroll" role="region" aria-label="Comment je l’ai vérifié" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">Ce que je voulais prouver</th><th scope="col">Le test</th><th scope="col">Ce que j’ai observé</th></tr></thead>
+      <tbody><tr><th scope="row">Le solveur trouve le vrai optimum</th><td>Comparaison avec le programme Held-Karp sur 15 instances</td><td><span class="ok-dot" aria-hidden="true"></span>Même coût optimal sur les 15</td></tr><tr><th scope="row">La charge est bien répartie</th><td>Nœuds et temps occupé par rang travailleur</td><td><span class="ok-dot" aria-hidden="true"></span>Équilibrée à 1 % près environ</td></tr></tbody>
+    </table>
+    </div>
+  <h3 class="case-sub">Résultat</h3><ul><li>Instance de 23 villes (environ 8,8 millions de nœuds explorés) : 41,5 s en séquentiel, 21,8 s avec 4 processus, soit une accélération d&#39;environ 1,9.</li><li>60 % des tâches sont éliminées par le maître avant d&#39;être envoyées, parce qu&#39;une meilleure tournée a été trouvée entre-temps.</li></ul></div></section><section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites et suites possibles</h2><div class="case-body"><ul><li>Toutes les mesures ont été faites sur un ordinateur portable à deux cœurs physiques (i5-4210M), où l&#39;accélération plafonne vers ×1,9. Le rapport montre que ce plafond vient de la machine et non du programme, mais nous ne l&#39;avons pas encore exécuté sur un cluster.</li><li>Travail de groupe : le code, le rapport et la présentation appartiennent à nous trois.</li></ul><h3 class="case-sub">Pour aller plus loin</h3><ul><li>Lancer le script Slurm sur le cluster de l&#39;université pour vérifier le passage à l&#39;échelle au-delà de deux cœurs.</li></ul></div></section><section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Code et documents</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi" rel="noopener noreferrer">Dépôt</a> <span class="muted small">github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi</span></li><li><a href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi/blob/main/rapport/Rapport_ILRO_PA.pdf" rel="noopener noreferrer">Rapport (PDF)</a> <span class="muted small">github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi/blob/main/rapport/Rapport_ILRO_PA.pdf</span></li><li><a href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer">Exercices MPI du cours</a> <span class="muted small">github.com/AGRO-Rachidi/hpc-fortran-mpi</span></li></ul></div></section>
   </div>
   <nav class="wrap pager" aria-label="Autres projets">
-    <a class="pager-prev" href="../../../fr/projects/cassandra-vs-postgresql/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Précédent</span><span>Cassandra en pratique : un cluster de 3 nœuds, un test de panne et dix ans de données</span></a>
+    <a class="pager-prev" href="../../../fr/projects/python-for-security/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Précédent</span><span>Python pour la sécurité : un journal d&#39;apprentissage</span></a>
     
   </nav>
 </article>
@@ -76,7 +75,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Tchêgoun Rachidi AGRO</p>
-      <p class="muted">Cybersécurité · Réseaux · Systèmes Linux · IA</p>
+      <p class="muted">Cybersécurité · Systèmes Linux · Réseaux</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

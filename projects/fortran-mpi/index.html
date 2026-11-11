@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'self' https://api.web3forms.com">
   <meta name="referrer" content="no-referrer">
-  <title>Parallel programming with Fortran and MPI · Rachidi AGRO</title>
-  <meta name="description" content="From the first MPI_Send to dynamic load balancing: point-to-point exchanges, Scatter/Gather on matrices, and a master–worker scheme that hands 150 Newton-method problems to whichever process is free first.">
+  <title>HPC: distributed Branch and Bound in Fortran and MPI · Rachidi AGRO</title>
+  <meta name="description" content="With two classmates, we wrote an exact solver for an asymmetric travelling salesman problem (a tour from Cotonou across 24 West African cities): a Branch and Bound parallelised with a dynamic master–worker scheme in Fortran 2008 and MPI, checked against Held-Karp, and measured with the laws of Amdahl and Gustafson.">
   <meta name="author" content="Tchêgoun Rachidi AGRO">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0a0f1d">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Parallel programming with Fortran and MPI · Rachidi AGRO">
-  <meta property="og:description" content="From the first MPI_Send to dynamic load balancing: point-to-point exchanges, Scatter/Gather on matrices, and a master–worker scheme that hands 150 Newton-method problems to whichever process is free first.">
+  <meta property="og:title" content="HPC: distributed Branch and Bound in Fortran and MPI · Rachidi AGRO">
+  <meta property="og:description" content="With two classmates, we wrote an exact solver for an asymmetric travelling salesman problem (a tour from Cotonou across 24 West African cities): a Branch and Bound parallelised with a dynamic master–worker scheme in Fortran 2008 and MPI, checked against Held-Karp, and measured with the laws of Amdahl and Gustafson.">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://agro-rachidi.github.io/projects/fortran-mpi/">
   <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/fortran-mpi/">
@@ -20,7 +20,7 @@
   <meta property="og:url" content="https://agro-rachidi.github.io/projects/fortran-mpi/">
   <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../assets/css/site.css?v=6fb7ff3bd7">
+  <link rel="stylesheet" href="../../assets/css/site.css?v=0273935435">
   <script src="../../assets/js/theme.js?v=e4e6d25562"></script>
   
 </head>
@@ -43,31 +43,30 @@
 <article class="case">
   <header class="wrap case-head">
     <a class="back" href="../../projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> All projects</a>
-    <p class="eyebrow">HPC · parallel computing</p>
-    <h1>Parallel programming with Fortran and MPI</h1>
-    <p class="lead">From the first MPI_Send to dynamic load balancing: point-to-point exchanges, Scatter/Gather on matrices, and a master–worker scheme that hands 150 Newton-method problems to whichever process is free first.</p>
+    <p class="eyebrow">HPC · optimization · parallel computing</p>
+    <h1>HPC: distributed Branch and Bound in Fortran and MPI</h1>
+    <p class="lead">With two classmates, we wrote an exact solver for an asymmetric travelling salesman problem (a tour from Cotonou across 24 West African cities): a Branch and Bound parallelised with a dynamic master–worker scheme in Fortran 2008 and MPI, checked against Held-Karp, and measured with the laws of Amdahl and Gustafson.</p>
     <dl class="facts">
-      <div><dt>Period</dt><dd>September – October 2026</dd></div>
-      <div><dt>Status</dt><dd>Coursework · advanced programming</dd></div>
+      <div><dt>Period</dt><dd>2026–2027 academic year</dd></div>
+      <div><dt>Status</dt><dd>Group project (3 students) · Advanced Programming and MPI course</dd></div>
       <div><dt>Type</dt><dd>Academic project</dd></div>
     </dl>
-    <ul class="tags" aria-label="Technologies"><li class="tag">Fortran 2008</li><li class="tag">MPI (mpi_f08)</li><li class="tag">Open MPI</li><li class="tag">LAPACK</li></ul>
-    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository</a></div>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Fortran 2008</li><li class="tag">MPI (mpi_f08)</li><li class="tag">Open MPI</li><li class="tag">Slurm</li><li class="tag">Python (analysis)</li><li class="tag">LaTeX</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Repository</a><a class="btn" href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi/blob/main/rapport/Rapport_ILRO_PA.pdf" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Report (PDF, in French)</a><a class="btn" href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> MPI course exercises</a></div>
   </header>
   <div class="wrap case-content">
-    
-    
-    
-    <section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did</h2><div class="case-body"><ul><li>Fortran basics: checked dynamic allocation, matrix operations, inversion with LAPACK (dgetrf/dgetri).</li><li>Point-to-point: first MPI programs, ranks and sizes, and two ranks exchanging matrices with MPI_Send and MPI_Recv.</li><li>Collectives: MPI_Scatter and MPI_Gather to square one matrix per worker.</li><li>Master–worker: the master sends the next task to the first worker that answers (MPI_ANY_SOURCE) and stops idle workers with a dedicated tag.</li></ul></div></section>
-    
-    
-    
-    <section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">What it doesn’t do (yet)</h2><div class="case-body"><ul><li>Course exercises: clarity over performance; no speed-up measurements are claimed.</li></ul></div></section>
-    
-    <section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Evidence</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer">Repository</a> <span class="muted small">github.com/AGRO-Rachidi/hpc-fortran-mpi</span></li></ul></div></section>
+    <section class="case-section" id="project" aria-labelledby="project-h"><h2 id="project-h">The project</h2><div class="case-body"><p>Final project of the Advanced Programming and MPI course at ENSGMM, done as a group of three (AGRO Rachidi, BOUKARI Haboud, GNONLONFOUN Octave) and supervised by Dr Bruno S. DANDOGBESSI. The task: solve a routing problem exactly, parallelise the search with MPI, and audit its performance with the tools seen in class. The earlier MPI course exercises are linked below.</p></div></section><section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">What I did, and what went wrong</h2><div class="case-body"><ul><li>Model: 24 cities with geographic coordinates, asymmetric costs, Cotonou as the depot.</li><li>Sequential core: depth-first Branch and Bound with a lower bound and a nearest-neighbour starting tour.</li><li>Parallel version: the master splits the tree into subtrees sorted by bound and hands them out on demand. Workers report better tours with MPI_Isend; the master detects them with MPI_Iprobe, relays the new bound and prunes its queue.</li><li>Verification: a separate Held-Karp program, used to check the optimum.</li><li>Measurements: strong and weak scaling, three runs per point, analysed with speed-up, efficiency, Amdahl&#39;s and Gustafson&#39;s laws and the Karp-Flatt metric.</li></ul></div></section><section class="case-section" id="checked" aria-labelledby="checked-h"><h2 id="checked-h">How I checked it</h2><div class="case-body">
+    <p class="muted small">What I wanted to prove, the test I ran, and what I actually saw.</p>
+    <div class="table-scroll" role="region" aria-label="How I checked it" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">What I wanted to prove</th><th scope="col">The test</th><th scope="col">What I saw</th></tr></thead>
+      <tbody><tr><th scope="row">The solver finds the true optimum</th><td>Compared with the separate Held-Karp program on 15 instances</td><td><span class="ok-dot" aria-hidden="true"></span>Same optimal cost on all 15</td></tr><tr><th scope="row">The work is evenly shared</th><td>Nodes and busy time per worker rank</td><td><span class="ok-dot" aria-hidden="true"></span>Balanced within about 1%</td></tr></tbody>
+    </table>
+    </div>
+  <h3 class="case-sub">Result</h3><ul><li>23-city instance (about 8.8 million nodes explored): 41.5 s sequentially, 21.8 s with 4 processes, a speed-up of about 1.9.</li><li>60% of the tasks are discarded by the master before being sent, because a better tour was found in the meantime.</li></ul></div></section><section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limits and next steps</h2><div class="case-body"><ul><li>All measurements were made on a laptop with two physical cores (i5-4210M), where the speed-up stops near ×1.9. The report argues that this ceiling comes from the machine, not the program, but we haven&#39;t run it on a cluster yet.</li><li>Group work: the code, report and slides belong to the three of us.</li></ul><h3 class="case-sub">What I would do next</h3><ul><li>Run the Slurm script on the university cluster to check the scaling beyond two cores.</li></ul></div></section><section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Code and documents</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi" rel="noopener noreferrer">Repository</a> <span class="muted small">github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi</span></li><li><a href="https://github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi/blob/main/rapport/Rapport_ILRO_PA.pdf" rel="noopener noreferrer">Report (PDF, in French)</a> <span class="muted small">github.com/AGRO-Rachidi/tsp-branch-and-bound-mpi/blob/main/rapport/Rapport_ILRO_PA.pdf</span></li><li><a href="https://github.com/AGRO-Rachidi/hpc-fortran-mpi" rel="noopener noreferrer">MPI course exercises</a> <span class="muted small">github.com/AGRO-Rachidi/hpc-fortran-mpi</span></li></ul></div></section>
   </div>
   <nav class="wrap pager" aria-label="More projects">
-    <a class="pager-prev" href="../../projects/cassandra-vs-postgresql/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous</span><span>Cassandra in practice: a 3-node cluster, a failure test and ten years of data</span></a>
+    <a class="pager-prev" href="../../projects/python-for-security/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Previous</span><span>Python for security: a learning log</span></a>
     
   </nav>
 </article>
@@ -76,7 +75,7 @@
   <div class="wrap footer-inner">
     <div>
       <p class="footer-name">Tchêgoun Rachidi AGRO</p>
-      <p class="muted">Cybersecurity · Networks · Linux Systems · AI</p>
+      <p class="muted">Cybersecurity · Linux systems · Networking</p>
     </div>
     <ul class="footer-links">
       <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>

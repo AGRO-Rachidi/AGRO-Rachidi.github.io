@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'self' https://api.web3forms.com">
+  <meta name="referrer" content="no-referrer">
+  <title>Gestion des comptes Linux à partir d&#39;un fichier CSV, en Bash · Rachidi AGRO</title>
+  <meta name="description" content="Un script Bash qui lit des employés dans un fichier CSV, crée les groupes de service et les comptes avec un mot de passe aléatoire, et peut être relancé sans créer de doublon. Publié avec un petit script de bilan système.">
+  <meta name="author" content="Tchêgoun Rachidi AGRO">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0a0f1d">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gestion des comptes Linux à partir d&#39;un fichier CSV, en Bash · Rachidi AGRO">
+  <meta property="og:description" content="Un script Bash qui lit des employés dans un fichier CSV, crée les groupes de service et les comptes avec un mot de passe aléatoire, et peut être relancé sans créer de doublon. Publié avec un petit script de bilan système.">
+  <meta property="og:locale" content="fr_FR">
+  <link rel="canonical" href="https://agro-rachidi.github.io/fr/projects/linux-user-management/">
+  <link rel="alternate" hreflang="fr" href="https://agro-rachidi.github.io/fr/projects/linux-user-management/">
+  <link rel="alternate" hreflang="en" href="https://agro-rachidi.github.io/projects/linux-user-management/">
+  <meta property="og:url" content="https://agro-rachidi.github.io/fr/projects/linux-user-management/">
+  <meta property="og:image" content="https://agro-rachidi.github.io/assets/img/portrait-720.jpg">
+  <link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../../assets/css/site.css?v=0273935435">
+  <script src="../../../assets/js/theme.js?v=e4e6d25562"></script>
+  
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../../../fr/" aria-label="Accueil"><span class="brand-mark" aria-hidden="true">RA</span><span class="brand-name">Rachidi AGRO</span></a>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <ul><li><a href="../../../fr/projects/" aria-current="page">Projets</a></li><li><a href="../../../fr/skills/">Compétences</a></li><li><a href="../../../fr/background/">Parcours</a></li><li><a href="../../../fr/about/">À propos</a></li></ul>
+    </nav>
+    <div class="header-tools">
+      <a class="lang-switch" href="../../../projects/linux-user-management/" hreflang="en" lang="en" title="English version">EN</a>
+      <button class="theme-toggle" type="button" aria-label="Basculer thème clair/sombre" title="Basculer thème clair/sombre"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.75a5.25 5.25 0 0 1 0 10.5z" fill="currentColor"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+
+<article class="case">
+  <header class="wrap case-head">
+    <a class="back" href="../../../fr/projects/"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tous les projets</a>
+    <p class="eyebrow">Administration Linux · Bash</p>
+    <h1>Gestion des comptes Linux à partir d&#39;un fichier CSV, en Bash</h1>
+    <p class="lead">Un script Bash qui lit des employés dans un fichier CSV, crée les groupes de service et les comptes avec un mot de passe aléatoire, et peut être relancé sans créer de doublon. Publié avec un petit script de bilan système.</p>
+    <dl class="facts">
+      <div><dt>Période</dt><dd>Août 2026</dd></div>
+      <div><dt>Statut</dt><dd>Terminé · projet personnel, pendant mon stage</dd></div>
+      <div><dt>Type</dt><dd>Projet personnel</dd></div>
+    </dl>
+    <ul class="tags" aria-label="Technologies"><li class="tag">Bash</li><li class="tag">useradd / groupadd</li><li class="tag">chpasswd</li><li class="tag">Ubuntu 24.04</li><li class="tag">Docker</li></ul>
+    <div class="actions"><a class="btn" href="https://github.com/AGRO-Rachidi/linux-user-management-bash" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5H3.5v9h9V10M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Dépôt</a></div>
+  </header>
+  <div class="wrap case-content">
+    <section class="case-section" id="project" aria-labelledby="project-h"><h2 id="project-h">Le projet</h2><div class="case-body"><p>En pratiquant l&#39;administration Linux en août 2026, je voulais arrêter de créer les comptes à la main. J&#39;avais documenté les scripts dans un rapport PDF ; les fichiers d&#39;origine ont ensuite été perdus, le code publié est donc repris de ce rapport. Une ligne absente du listing imprimé (la boucle qui lit le CSV) a été rétablie et signalée par un commentaire.</p></div></section><section class="case-section" id="work" aria-labelledby="work-h"><h2 id="work-h">Ce que j’ai fait, et ce qui a coincé</h2><div class="case-body"><ul><li>Pour chaque ligne du CSV (prénom, nom, service) : créer le groupe du service s&#39;il n&#39;existe pas, puis le compte prenom.nom avec son dossier personnel, son propre groupe principal et le service en groupe secondaire.</li><li>Générer un mot de passe aléatoire de 12 caractères, l&#39;appliquer avec chpasswd et l&#39;enregistrer dans credentials.txt.</li><li>health_check.sh affiche la date, la charge, la mémoire, l&#39;occupation des disques et les cinq processus qui consomment le plus de mémoire.</li></ul></div></section><section class="case-section" id="checked" aria-labelledby="checked-h"><h2 id="checked-h">Comment je l’ai vérifié</h2><div class="case-body">
+    <p class="muted small">Ce que je voulais prouver, le test que j’ai fait, et ce que j’ai réellement observé.</p>
+    <div class="table-scroll" role="region" aria-label="Comment je l’ai vérifié" tabindex="0">
+    <table class="ledger">
+      <thead><tr><th scope="col">Ce que je voulais prouver</th><th scope="col">Le test</th><th scope="col">Ce que j’ai observé</th></tr></thead>
+      <tbody><tr><th scope="row">La première exécution crée les comptes</th><td>Exécution sous Ubuntu 24.04 dans un conteneur Docker jetable, avec le CSV d&#39;exemple</td><td><span class="ok-dot" aria-hidden="true"></span>2 groupes et 4 comptes créés</td></tr><tr><th scope="row">Le script peut être relancé</th><td>Deuxième exécution avec le même CSV</td><td><span class="ok-dot" aria-hidden="true"></span>Tout est signalé comme déjà existant, aucun doublon</td></tr></tbody>
+    </table>
+    </div>
+  </div></section><section class="case-section" id="limits" aria-labelledby="limits-h"><h2 id="limits-h">Limites et suites possibles</h2><div class="case-body"><ul><li>Les mots de passe sont écrits en clair dans credentials.txt. Sur un vrai système, il faudrait les transmettre autrement et imposer leur changement à la première connexion (chage -d 0).</li><li>Aucune validation du contenu du CSV (champs vides, espaces, accents), et pas de mode simulation.</li></ul></div></section><section class="case-section" id="evidence" aria-labelledby="evidence-h"><h2 id="evidence-h">Code et documents</h2><div class="case-body"><ul><li><a href="https://github.com/AGRO-Rachidi/linux-user-management-bash" rel="noopener noreferrer">Dépôt</a> <span class="muted small">github.com/AGRO-Rachidi/linux-user-management-bash</span></li></ul></div></section>
+  </div>
+  <nav class="wrap pager" aria-label="Autres projets">
+    <a class="pager-prev" href="../../../fr/projects/department-file-server/"><span class="muted small"><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H4M7.5 4.5 4 8l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Précédent</span><span>Un serveur de fichiers cloisonné par service, des groupes Unix à Samba</span></a>
+    <a class="pager-next" href="../../../fr/projects/enterprise-network-labs/"><span class="muted small">Suivant <svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Labos réseau d&#39;entreprise : de la VLAN à l&#39;architecture multi-sites sécurisée</span></a>
+  </nav>
+</article>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-name">Tchêgoun Rachidi AGRO</p>
+      <p class="muted">Cybersécurité · Systèmes Linux · Réseaux</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:rachidiagro48@gmail.com">rachidiagro48@gmail.com</a></li>
+      <li><a href="https://github.com/AGRO-Rachidi" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/tch%C3%AAgoun-rachidi-agro-a98b66281/" rel="noopener noreferrer">LinkedIn</a></li>
+      <li><a href="../../../assets/docs/CV_AGRO_FR.pdf" download>CV (PDF)</a></li>
+    </ul>
+    <p class="footer-meta muted">© 2026 Tchêgoun Rachidi AGRO</p>
+  </div>
+</footer>
+</body>
+</html>
